@@ -1,0 +1,65 @@
+@using WebDBAdmin.Application.Interfaces
+@inject SessionStateService SessionState
+@inject ISchemaService SchemaService
+@inject NotificationService NotificationService
+@inject UIInteractionService UIInteraction
+@inject ContextMenuService ContextMenuService
+@inject ITableService TableService
+@inject DialogService DialogService
+
+<RadzenCard Style="height: 100%; overflow: auto;">
+    @if (SessionState.IsConnected)
+    {
+        <RadzenTree Style="width: 100%; height: 100%" Expand="@OnExpand" Collapse="@OnCollapse"
+            ItemContextMenu="@OnItemContextMenu">
+            @foreach (var node in nodes)
+            {
+                <RadzenTreeItem Text="@node.Name" Value="@node" HasChildren="@node.HasChildren" Expanded="@node.IsExpanded">
+                    <Template>
+                        <RadzenIcon Icon="@GetIconForNode(node)"
+                            Style="vertical-align: middle; margin-right: 4px; font-size: 1rem;" />
+                        <span style="vertical-align: middle; font-size: 0.85rem;">@node.Name</span>
+                    </Template>
+                    <ChildContent>
+                        @if (node.Children != null)
+                        {
+                            @foreach (var child in node.Children)
+                            {
+                                @RenderTreeItem(child)
+                            }
+                        }
+                    </ChildContent>
+                </RadzenTreeItem>
+            }
+        </RadzenTree>
+    }
+    else
+    {
+        <div class="rz-p-2">
+            <RadzenText TextStyle="TextStyle.Body2">No Active Connection</RadzenText>
+        </div>
+    }
+</RadzenCard>
+
+@implements IDisposable
+
+@code {
+    RenderFragment RenderTreeItem(SchemaNode node) => __builder =>
+    {
+        <RadzenTreeItem Text="@node.Name" Value="@node" HasChildren="@node.HasChildren" Expanded="@node.IsExpanded">
+            <Template>
+                <RadzenIcon Icon="@GetIconForNode(node)" Style="vertical-align: middle; margin-right: 4px; font-size: 1rem;" />
+                <span style="vertical-align: middle; font-size: 0.85rem;">@node.Name</span>
+            </Template>
+            <ChildContent>
+                @if (node.Children != null)
+                {
+                    @foreach (var child in node.Children)
+                    {
+                        @RenderTreeItem(child)
+                    }
+                }
+            </ChildContent>
+        </RadzenTreeItem>
+    };
+}

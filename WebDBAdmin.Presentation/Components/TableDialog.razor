@@ -1,0 +1,131 @@
+@using WebDBAdmin.Application.DTOs
+@using WebDBAdmin.Domain.Enums
+@using Radzen
+@using Radzen.Blazor
+
+<RadzenStack Gap="1rem" Orientation="Orientation.Vertical" Style="padding: 1rem;">
+    <RadzenTemplateForm TItem="TableDefinition" Data="@TableDefinition" Submit="@OnSubmit">
+        <RadzenStack Gap="1rem">
+            <RadzenFormField Text="Table Name" Variant="Variant.Outlined">
+                <RadzenTextBox @bind-Value="@TableDefinition.Name" Name="TableName" Style="width: 100%;"
+                    Disabled="@IsModification" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="TableName" Text="Table name is required" />
+
+            <RadzenText TextStyle="TextStyle.Subtitle1">Columns</RadzenText>
+
+            <RadzenDataGrid @ref="columnsGrid" Data="@TableDefinition.Columns" TItem="ColumnDefinition"
+                AllowSorting="false" AllowFiltering="false" AllowPaging="false" Density="Density.Compact">
+                <Columns>
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Name" Title="Name">
+                        <Template Context="column">
+                            <RadzenTextBox @bind-Value="column.Name" Style="width: 100%" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Type" Title="Type">
+                        <Template Context="column">
+                            <RadzenDropDown @bind-Value="column.Type" Data="@GetDataTypes()" Style="width: 100%"
+                                AllowClear="false" AllowFiltering="true" TextProperty="Name" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Length" Title="Length/Size" Width="100px">
+                        <Template Context="column">
+                            <RadzenNumeric @bind-Value="column.Length" ShowUpDown="false" Style="width: 100%" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="IsNullable" Title="Nullable" Width="80px"
+                        TextAlign="TextAlign.Center">
+                        <Template Context="column">
+                            <RadzenCheckBox @bind-Value="column.IsNullable" TValue="bool"
+                                Disabled="@column.IsPrimaryKey" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="IsPrimaryKey" Title="PK" Width="60px"
+                        TextAlign="TextAlign.Center">
+                        <Template Context="column">
+                            <RadzenCheckBox Value="@column.IsPrimaryKey" TValue="bool"
+                                Change="@(args => { column.IsPrimaryKey = args; if (args) column.IsNullable = false; })" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Context="column" Filterable="false" Sortable="false"
+                        TextAlign="TextAlign.Right" Width="60px">
+                        <Template Context="column">
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Flat"
+                                Size="ButtonSize.ExtraSmall" Click="@(args => RemoveColumn(column))"
+                                @onclick:stopPropagation="true" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+
+            <RadzenButton Text="Add Column" Icon="add" ButtonStyle="ButtonStyle.Secondary" Variant="Variant.Outlined"
+                Click="@AddColumn" Size="ButtonSize.Small" />
+
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Save" Icon="save"
+                    ButtonStyle="ButtonStyle.Primary" />
+                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Click="@Cancel" />
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenStack>
+
+@code {
+    [Parameter] public TableDefinition TableDefinition { get; set; } = new TableDefinition();
+    [Parameter] public DatabaseEngine Engine { get; set; }
+    [Parameter] public bool IsModification { get; set; } = false;
+
+    RadzenDataGrid<ColumnDefinition>? columnsGrid;
+
+    private async Task AddColumn()
+    {
+        TableDefinition.Columns.Add(new ColumnDefinition { Name = "NewColumn", Type = typeof(System.Int32), IsNullable = true });
+        if (columnsGrid != null) await columnsGrid.Reload();
+    }
+
+    private async Task RemoveColumn(ColumnDefinition column)
+    {
+        TableDefinition.Columns.Remove(column);
+        if (columnsGrid != null) await columnsGrid.Reload();
+    }
+
+    private void OnSubmit(TableDefinition table)
+    {
+        DialogService.Close(table);
+    }
+
+    private void Cancel()
+    {
+        DialogService.Close(null);
+    }
+
+    [Inject] DialogService DialogService { get; set; }
+
+    private List<Type> GetDataTypes()
+    {
+        return new List<Type>
+{
+typeof(string),
+typeof(char),
+typeof(byte),
+typeof(sbyte),
+typeof(short),
+typeof(ushort),
+typeof(int),
+typeof(uint),
+typeof(long),
+typeof(ulong),
+typeof(float),
+typeof(double),
+typeof(decimal),
+typeof(bool),
+typeof(Guid),
+typeof(DateTime),
+typeof(DateTimeOffset),
+typeof(DateOnly),
+typeof(TimeOnly),
+typeof(TimeSpan),
+typeof(byte[])
+}.OrderBy(t => t.Name).ToList();
+    }
+}

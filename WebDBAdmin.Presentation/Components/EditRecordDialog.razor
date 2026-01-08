@@ -1,0 +1,126 @@
+@using Radzen
+@using Radzen.Blazor
+@using WebDBAdmin.Domain.Entities
+@using System.Collections.Generic
+@using WebDBAdmin.Application.DTOs
+
+@inject DialogService DialogService
+
+<RadzenStack Gap="1rem" Style="padding: 1rem;">
+    @foreach (var col in Columns)
+    {
+        // Edit Mode Logic: Hide Primary Keys usually (as per previous logic), or maybe show read-only?
+        // Previous logic was: tableColumns.Where(c => !c.IsPrimaryKey)
+        if (col.IsPrimaryKey) continue;
+
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+            <RadzenText TextStyle="TextStyle.Subtitle2" Style="color: var(--rz-text-secondary-color);">
+                @col.Name
+            </RadzenText>
+
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem"
+                Style="width: 100%;">
+                @{
+                    bool isNull = IsNull(col.Name);
+                }
+
+                @if (col.Type == typeof(byte[]))
+                {
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-disabled-color); font-style: italic;">
+                        Binary Data (Read Only)
+                    </RadzenText>
+                }
+                else if (col.Type == typeof(bool))
+                {
+                    bool val = !isNull && Data[col.Name] is bool b ? b : false;
+                    <RadzenCheckBox TValue="bool" Value="@val" Disabled="@isNull"
+                        Change="@(args => UpdateValue(col.Name, args))" />
+                }
+                else if (col.Type == typeof(DateTime))
+                {
+                    DateTime? val = !isNull && Data[col.Name] is DateTime d ? d : null;
+                    <RadzenDatePicker TValue="DateTime?" Value="@val" Disabled="@isNull"
+                        Change="@(args => UpdateValue(col.Name, args))" ShowTime="true" Style="width: 100%" />
+                }
+                else if (IsNumeric(col.Type))
+                {
+                    <RadzenNumeric Value="@(!isNull ? Convert.ToDecimal(Data[col.Name]) : 0)" TValue="decimal"
+                        Disabled="@isNull" Change="@(args => UpdateValue(col.Name, Convert.ChangeType(args, col.Type)))"
+                        Style="width: 100%" />
+                }
+                else
+                {
+                    <RadzenTextBox Value="@(!isNull ? Data[col.Name]?.ToString() : "")" Disabled="@isNull"
+                        Change="@(args => UpdateValue(col.Name, args))" Style="width: 100%" />
+                }
+
+                @if (col.IsNullable)
+                {
+                    <RadzenCheckBox TValue="bool" Value="@isNull" Change="@(args => SetNull(col, args))" />
+                    <RadzenText Text="Null" Style="white-space: nowrap;" />
+                }
+            </RadzenStack>
+        </RadzenStack>
+    }
+
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="1rem" Class="mt-2">
+        <RadzenButton Text="Save" Icon="save" ButtonStyle="ButtonStyle.Primary" Click="@Save" />
+        <RadzenButton Text="Cancel" Icon="cancel" ButtonStyle="ButtonStyle.Light" Click="@Cancel" />
+    </RadzenStack>
+</RadzenStack>
+
+@code {
+    [Parameter] public IDictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+    [Parameter] public List<ColumnInfo> Columns { get; set; } = new List<ColumnInfo>();
+
+    void SetNull(ColumnInfo col, bool isNull)
+    {
+        if (isNull)
+        {
+            Data[col.Name] = null; // Or DBNull.Value if preferred, but repoDB handles null
+        }
+        else
+        {
+            // Restore default
+            Data[col.Name] = GetDefault(col.Type);
+        }
+        // Force re-render ensures Disabled state updates immediately
+        StateHasChanged();
+    }
+
+    void UpdateValue(string colName, object? value)
+    {
+        Data[colName] = value;
+    }
+
+    bool IsNull(string colName)
+    {
+        return !Data.ContainsKey(colName) || Data[colName] == null || Data[colName] == DBNull.Value;
+    }
+
+    bool IsNumeric(Type t)
+    {
+        return Type.GetTypeCode(t) is TypeCode.Byte or TypeCode.SByte or TypeCode.UInt16 or TypeCode.UInt32 or
+        TypeCode.UInt64 or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Decimal or TypeCode.Double or
+        TypeCode.Single;
+    }
+
+    object? GetDefault(Type t)
+    {
+        if (t == typeof(string)) return string.Empty;
+        if (t == typeof(DateTime)) return DateTime.Now;
+        if (t == typeof(bool)) return false;
+        if (t.IsValueType && Nullable.GetUnderlyingType(t) == null) return Activator.CreateInstance(t);
+        return null;
+    }
+
+    void Save()
+    {
+        DialogService.Close(true);
+    }
+
+    void Cancel()
+    {
+        DialogService.Close(false);
+    }
+}

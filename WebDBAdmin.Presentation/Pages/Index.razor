@@ -1,0 +1,62 @@
+﻿@page "/"
+@using WebDBAdmin.Presentation.Components
+@using WebDBAdmin.Domain.Entities
+@using WebDBAdmin.Presentation.Pages
+
+<PageTitle>UniversalDB Studio</PageTitle>
+
+<RadzenTabs @bind-SelectedIndex="selectedIndex" RenderMode="TabRenderMode.Client" Style="height: 100%; width: 100%;">
+    <Tabs>
+        <RadzenTabsItem Text="Connections" Icon="link">
+            <RadzenStack Style="padding: 1rem; height: 100%; overflow: auto;">
+                <!-- Embed Connections page logic -->
+                <Connections OnConnectionOpen="@OnConnectionOpen" />
+            </RadzenStack>
+        </RadzenTabsItem>
+
+        @foreach (var conn in openConnections)
+        {
+            <RadzenTabsItem Text="@(conn.Name ?? conn.Database ?? "Connection")" Icon="storage">
+                <Template>
+                    <RadzenText Text="@(conn.Name ?? conn.Database ?? "Connection")"
+                        Style="margin-right: 8px; display: inline-block;" />
+                    <span @onclick:stopPropagation="true" @onclick="@(() => CloseTab(conn))" style="cursor: pointer;">
+                        <RadzenIcon Icon="close" Style="font-size: 0.8rem;" />
+                    </span>
+                </Template>
+                <ChildContent>
+                    <ConnectionTab Connection="@conn" />
+                </ChildContent>
+            </RadzenTabsItem>
+        }
+    </Tabs>
+</RadzenTabs>
+
+@code {
+    int selectedIndex = 0;
+    List<ConnectionInfo> openConnections = new List<ConnectionInfo>();
+
+    void OnConnectionOpen(ConnectionInfo connection)
+    {
+        // Check if already open
+        var existing = openConnections.FirstOrDefault(c => c.Id == connection.Id);
+        if (existing != null)
+        {
+            // Switch to existing tab
+            // Index is 1 (Connections) + index in list
+            selectedIndex = openConnections.IndexOf(existing) + 1;
+        }
+        else
+        {
+            // Add new tab
+            openConnections.Add(connection);
+            selectedIndex = openConnections.Count; // Select the new tab (Count is effectively index + 1)
+        }
+    }
+
+    void CloseTab(ConnectionInfo connection)
+    {
+        openConnections.Remove(connection);
+        selectedIndex = 0; // Go back to connections list
+    }
+}

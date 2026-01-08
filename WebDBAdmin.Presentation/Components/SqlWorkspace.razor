@@ -1,0 +1,533 @@
+@using WebDBAdmin.Application.Interfaces
+@using WebDBAdmin.Domain.Interfaces
+@using System.Data
+@using Radzen
+@using Radzen.Blazor
+@using WebDBAdmin.Application.Services
+@using WebDBAdmin.Domain.Entities
+@using System.Text
+@using Microsoft.AspNetCore.Components
+@using RepoDb
+@using RepoDb.Enumerations
+@using RepoDb.Extensions
+@using System.Dynamic
+
+@inject UIInteractionService UIInteraction
+@inject IConnectionFactory ConnectionFactory
+@inject IDatabaseMetadataService MetadataService
+@inject NotificationService NotificationService
+@inject DialogService DialogService
+@inject NavigationManager NavigationManager
+@inject SessionStateService SessionState
+
+@implements IDisposable
+
+<RadzenStack Style="height: 100%; overflow: hidden;">
+    <!-- Results Grid -->
+    <RadzenCard Style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+            JustifyContent="JustifyContent.SpaceBetween" Class="rz-p-1"
+            Style="border-bottom: 1px solid var(--rz-border-color);">
+            <RadzenText TextStyle="TextStyle.Subtitle2" Class="m-0">
+                @(string.IsNullOrEmpty(currentTableName) ? "No Table Selected" : currentTableName)
+            </RadzenText>
+            @if (tableColumns != null)
+            {
+                <RadzenButton Icon="add" Click="@ShowAddDialog" ButtonStyle="ButtonStyle.Success"
+                    Size="ButtonSize.ExtraSmall" Text="Add Record" Variant="Variant.Flat" Class="me-1" />
+                <RadzenButton Icon="refresh" Click="@RefreshData" ButtonStyle="ButtonStyle.Light"
+                    Size="ButtonSize.ExtraSmall" Text="Refresh" Variant="Variant.Text" />
+            }
+        </RadzenStack>
+
+        @if (isLoading)
+        {
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+        }
+        else if (error != null)
+        {
+            <RadzenAlert Severity="AlertSeverity.Error" AllowClose="false" Variant="Variant.Flat">@error</RadzenAlert>
+        }
+        else if (viewData != null && tableColumns != null)
+        {
+            <RadzenDataGrid @ref="grid" Data="@gridData" TItem="dynamic" Count="@totalCount" LoadData="@OnLoadData"
+                AllowPaging="true" PageSize="20" ShowPagingSummary="true" AllowSorting="true" AllowFiltering="true"
+                FilterMode="FilterMode.Advanced" AllowColumnPicking="true" AllowColumnResize="true"
+                Style="height: 100%; border: none;" GridLines="DataGridGridLines.Both">
+                <Columns>
+                    @foreach (var col in tableColumns)
+                    {
+                        <RadzenDataGridColumn TItem="dynamic" Title="@col.Name" Property="@col.Name" Type="@col.Type"
+                            MinWidth="150px" Pickable="true" Sortable="true" Filterable="true">
+                            <Template Context="data">
+                                @(((IDictionary<string, object>)data).ContainsKey(col.Name) ? ((IDictionary<string,
+                                                        object>)data)[col.Name] : "")
+                            </Template>
+                        </RadzenDataGridColumn>
+                    }
+                    <RadzenDataGridColumn TItem="dynamic" Context="data" Filterable="false" Sortable="false"
+                        TextAlign="TextAlign.Center" Width="160px" Pickable="false" Frozen="true">
+                        <Template Context="data">
+                            <RadzenButton Icon="visibility" ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat"
+                                Size="ButtonSize.Medium" Click="@(args => { ShowRowDetails(data); })"
+                                @onclick:stopPropagation="true" Class="me-1" />
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"
+                                Size="ButtonSize.Medium" Click="@(async args => { await ShowEditDialog(data); })"
+                                @onclick:stopPropagation="true" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+        else
+        {
+            <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Style="height: 100%">
+                <RadzenIcon Icon="table_view" Style="font-size: 4rem; color: var(--rz-text-disabled-color);" />
+                <RadzenText TextStyle="TextStyle.Body1" Style="color: var(--rz-text-disabled-color);">
+                    Select a table from
+                    the Schema Browser to view data.
+                </RadzenText>
+            </RadzenStack>
+        }
+    </RadzenCard>
+</RadzenStack>
+
+@code {
+    RadzenDataGrid<dynamic>? grid;
+    bool isLoading = false;
+    string? error;
+    string? currentTableName;
+
+    // View State
+    IEnumerable<dynamic>? viewData;
+    IEnumerable<dynamic>? gridData;
+    int totalCount;
+    List<ColumnInfo>? tableColumns;
+
+    async Task OnLoadData(LoadDataArgs args)
+    {
+        if (viewData == null)
+        {
+            gridData = null;
+            totalCount = 0;
+            return;
+        }
+
+        // Use IEnumerable directly to avoid "Expression tree may not contain dynamic operation"
+        var query = viewData;
+
+        // Filtering
+        // Note: Do NOT access args.Filter property string, as it triggers internal reflection on TItem which fails for dynamic.
+        if (args.Filters.Any())
+        {
+            query = query.Where(item =>
+            {
+                return args.Filters.All(f => MatchesFilter((IDictionary<string, object>)item, f));
+            });
+        }
+
+        // Sorting
+        if (!string.IsNullOrEmpty(args.OrderBy))
+        {
+            // Manual sort
+            // Format: "Property asc" or "Property desc"
+            var parts = args.OrderBy.Split(' ');
+            var prop = parts[0];
+            var desc = parts.Length > 1 && parts[1].ToLower() == "desc";
+
+            if (desc)
+                query = query.OrderByDescending(item => ((IDictionary<string, object>)item)[prop]);
+            else
+                query = query.OrderBy(item => ((IDictionary<string, object>)item)[prop]);
+        }
+
+        totalCount = query.Count();
+
+        // Paging
+        if (args.Skip.HasValue && args.Top.HasValue)
+        {
+            query = query.Skip(args.Skip.Value).Take(args.Top.Value);
+        }
+
+        gridData = query.ToList();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // Updated MatchesFilter to handle FilterDescriptor properties for advanced filtering
+    bool MatchesFilter(IDictionary<string, object> item, object f)
+    {
+        if (f is CompositeFilterDescriptor composite)
+        {
+            // This block handles composite filters (e.g., multiple columns with AND/OR logic)
+            // The recursive call passes the individual filter descriptors to this same method.
+            bool result = composite.LogicalFilterOperator == LogicalFilterOperator.Or
+            ? composite.Filters.Any(filter => MatchesFilter(item, filter))
+            : composite.Filters.All(filter => MatchesFilter(item, filter));
+            return result;
+        }
+        else if (f is FilterDescriptor simpleFilter)
+        {
+            // This block handles simple filters or advanced filters for a single column
+            var key = item.Keys.FirstOrDefault(k => k.Equals(simpleFilter.Property, StringComparison.OrdinalIgnoreCase));
+            if (key == null) return false; // Property not found in item
+
+            var val = item[key];
+
+            // Evaluate the first condition
+            bool r1 = EvaluateCondition(val, simpleFilter.FilterValue, simpleFilter.FilterOperator);
+
+            // Check if a second condition is present (for advanced filtering on a single column)
+            // A second condition is considered present if SecondFilterValue is not null,
+            // or if SecondFilterOperator is IsNull/IsNotNull (which don't require a value).
+            bool hasSecondCondition = simpleFilter.SecondFilterValue != null ||
+            simpleFilter.SecondFilterOperator == FilterOperator.IsNull ||
+            simpleFilter.SecondFilterOperator == FilterOperator.IsNotNull;
+
+            if (hasSecondCondition)
+            {
+                // Evaluate the second condition
+                bool r2 = EvaluateCondition(val, simpleFilter.SecondFilterValue, simpleFilter.SecondFilterOperator);
+
+                // Combine results based on the logical operator
+                return simpleFilter.LogicalFilterOperator == LogicalFilterOperator.Or ? r1 || r2 : r1 && r2;
+            }
+
+            return r1; // Only the first condition applies
+        }
+        else
+        {
+            // Unknown filter type, default to true (or throw an error)
+            // For robustness, we'll return true, effectively ignoring unknown filters.
+            return true;
+        }
+    }
+
+    // Helper method to evaluate a single filter condition
+    bool EvaluateCondition(object? val, object? filterVal, FilterOperator op)
+    {
+        // Handling nulls for the item's value
+        if (val == null || val == DBNull.Value)
+        {
+            if (op == FilterOperator.IsNull) return true;
+            if (op == FilterOperator.IsNotNull) return false;
+            return false; // If item's value is null, and operator is not IsNull/IsNotNull, it doesn't match
+        }
+
+        // If item's value is not null, but operator is IsNull, it doesn't match
+        if (op == FilterOperator.IsNull) return false;
+        // If item's value is not null, and operator is IsNotNull, it matches
+        if (op == FilterOperator.IsNotNull) return true;
+
+        // If filter value is null at this point, and not IsNull/IsNotNull, it's usually a mismatch
+        // unless the operator is Contains/StartsWith/EndsWith with an empty string.
+        // For simplicity, we'll assume a null filterVal means no match for most operators,
+        // but for string operations, it might be treated as an empty string.
+        if (filterVal == null)
+        {
+            // Special handling for string operators with null filterVal (treat as empty string)
+            if (op == FilterOperator.Contains || op == FilterOperator.DoesNotContain ||
+            op == FilterOperator.StartsWith || op == FilterOperator.EndsWith ||
+            op == FilterOperator.Equals || op == FilterOperator.NotEquals)
+            {
+                filterVal = "";
+            }
+            else
+            {
+                return false; // For numeric/other types, null filterVal means no match
+            }
+        }
+
+        // Numeric Comparison attempts
+        if (IsNumeric(val) && IsNumeric(filterVal))
+        {
+            try
+            {
+                decimal dVal = Convert.ToDecimal(val);
+                decimal dFilter = Convert.ToDecimal(filterVal);
+
+                switch (op)
+                {
+                    case FilterOperator.Equals: return dVal == dFilter;
+                    case FilterOperator.NotEquals: return dVal != dFilter;
+                    case FilterOperator.LessThan: return dVal < dFilter;
+                    case FilterOperator.LessThanOrEquals: return dVal <= dFilter;
+                    case FilterOperator.GreaterThan: return dVal > dFilter;
+                    case FilterOperator.GreaterThanOrEquals: return dVal >= dFilter;
+                }
+            }
+            catch { /* Fallback to string comparison if numeric conversion fails */ }
+        }
+
+        // String Comparison (default or fallback)
+        string valStr = val.ToString() ?? "";
+        string filterStr = filterVal.ToString() ?? "";
+
+        switch (op)
+        {
+            case FilterOperator.Equals: return valStr.Equals(filterStr, StringComparison.OrdinalIgnoreCase);
+            case FilterOperator.NotEquals: return !valStr.Equals(filterStr, StringComparison.OrdinalIgnoreCase);
+            case FilterOperator.Contains: return valStr.Contains(filterStr, StringComparison.OrdinalIgnoreCase);
+            case FilterOperator.DoesNotContain: return !valStr.Contains(filterStr, StringComparison.OrdinalIgnoreCase);
+            case FilterOperator.StartsWith: return valStr.StartsWith(filterStr, StringComparison.OrdinalIgnoreCase);
+            case FilterOperator.EndsWith: return valStr.EndsWith(filterStr, StringComparison.OrdinalIgnoreCase);
+            case FilterOperator.IsEmpty: return string.IsNullOrEmpty(valStr);
+            case FilterOperator.IsNotEmpty: return !string.IsNullOrEmpty(valStr);
+            default: return valStr.Contains(filterStr, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    bool IsNumeric(object? expression)
+    {
+        if (expression == null) return false;
+        return expression is short || expression is int || expression is long || expression is decimal || expression is float ||
+        expression is double;
+    }
+
+    // Current context to allow refresh
+    ConnectionInfo? currentConnectionInfo;
+
+    [Parameter] public ConnectionInfo? Connection { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Global subscription only if no scoped connection?
+        // Or supporting both for backwards compat (Home tab workspace?)
+        // If we are effectively "The Workspace" for the connection, we should just use the parameter.
+
+        UIInteraction.OnTableLoadRequested += LoadTableWrapper;
+
+        if (Connection != null)
+        {
+            currentConnectionInfo = Connection;
+        }
+        else if (SessionState.CurrentConnection != null)
+        {
+            // Connected
+            currentConnectionInfo = SessionState.CurrentConnection;
+        }
+    }
+
+    public void Dispose()
+    {
+        UIInteraction.OnTableLoadRequested -= LoadTableWrapper;
+        CleanupData();
+    }
+
+    void CleanupData()
+    {
+        viewData = null;
+        totalCount = 0;
+        tableColumns = null;
+    }
+
+    public async Task LoadTableAsync(ConnectionInfo connectionInfo, string tableName)
+    {
+        await LoadTable(connectionInfo, tableName);
+    }
+
+    async Task LoadTable(ConnectionInfo connectionInfo, string tableName)
+    {
+        isLoading = true;
+        error = null;
+        currentTableName = tableName;
+        currentConnectionInfo = connectionInfo;
+        CleanupData();
+        StateHasChanged();
+
+        // Yield to UI
+        await Task.Yield();
+
+        try
+        {
+            // 1. Get Schema (Columns)
+            tableColumns = await MetadataService.GetColumnsAsync(connectionInfo, tableName);
+
+            if (tableColumns == null || tableColumns.Count == 0)
+            {
+                throw new Exception($"Table '{tableName}' not found or has no columns.");
+            }
+
+            // 2. Load Data via RepoDB
+            // RepoDB QueryAll returns IEnumerable<dynamic> (ExpandoObject)
+            using var connection = ConnectionFactory.CreateConnection(connectionInfo);
+            connection.Open();
+            var result = await connection.QueryAllAsync(tableName);
+            viewData = result.ToList();
+            totalCount = viewData.Count();
+
+            // Refresh grid if exists
+            if (grid != null)
+            {
+                await grid.Reload();
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+            NotificationService.Notify(NotificationSeverity.Error, "Error Loading Table", ex.Message);
+        }
+        finally
+        {
+            isLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    // Wrapper to adapt event to async void
+    private void LoadTableWrapper(ConnectionInfo connectionInfo, string tableName)
+    {
+        _ = LoadTable(connectionInfo, tableName);
+    }
+
+    void RefreshData()
+    {
+        if (currentConnectionInfo != null && !string.IsNullOrEmpty(currentTableName))
+        {
+            _ = LoadTable(currentConnectionInfo, currentTableName);
+        }
+    }
+
+    async Task OnAddRow(dynamic item)
+    {
+        if (currentConnectionInfo != null && !string.IsNullOrEmpty(currentTableName))
+        {
+            try
+            {
+                using var connection = ConnectionFactory.CreateConnection(currentConnectionInfo);
+                connection.Open();
+                // RepoDB InsertAsync usually returns the ID of inserted row
+                await connection.InsertAsync(currentTableName, (object)item);
+                NotificationService.Notify(NotificationSeverity.Success, "Added", "Row inserted successfully.");
+
+                // Refresh data to show new row
+                RefreshData();
+            }
+            catch (Exception ex)
+            {
+                NotificationService.Notify(NotificationSeverity.Error, "Error Adding", ex.Message);
+            }
+        }
+    }
+
+    async Task ShowAddDialog()
+    {
+        if (tableColumns == null) return;
+
+        // Create a new ExpandoObject (Dictionary)
+        var dict = new ExpandoObject() as IDictionary<string, object>;
+
+        // Initialize fields if necessary (optional)
+        // Note: We don't need to preset keys for Insert, RepoDB handles it.
+
+        await DialogService.OpenAsync("Add New Record", ds =>
+        @<RadzenStack Gap="1rem" Style="padding: 1rem;">
+        @foreach (var col in tableColumns)
+        {
+            // Skip Identity columns (Auto-Increment)
+            if (col.IsIdentity) continue;
+
+            // Skip Binary columns for input (too complex)
+            if (col.Type == typeof(byte[]))
+            {
+                continue;
+            }
+
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+                    <RadzenText TextStyle="TextStyle.Subtitle2" Style="color: var(--rz-text-secondary-color);">
+                        @col.Name
+                    </RadzenText>
+                    @if (col.Type == typeof(Boolean))
+                    {
+                        bool val = dict.ContainsKey(col.Name) && dict[col.Name] is bool b ? b : false;
+                        <RadzenCheckBox TValue="bool" Value="@val" Change="@(args => dict[col.Name] = args)" />
+                    }
+                    else if (col.Type == typeof(System.DateTime))
+                    {
+                        DateTime? val = dict.ContainsKey(col.Name) && dict[col.Name] is DateTime d ? d : null;
+                        <RadzenDatePicker TValue="DateTime?" Value="@val" Change="@(args => dict[col.Name] = args)" ShowTime="true"
+                            Style="width: 100%" />
+                    }
+                    else if (Type.GetTypeCode(col.Type) is TypeCode.Byte or TypeCode.SByte or TypeCode.UInt16 or TypeCode.UInt32 or
+            TypeCode.UInt64 or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Decimal or TypeCode.Double or
+            TypeCode.Single)
+                    {
+                        <RadzenNumeric Value="@(dict.ContainsKey(col.Name) ? Convert.ToDecimal(dict[col.Name]) : 0)" TValue="decimal"
+                            Change="@(args => dict[col.Name] = Convert.ChangeType(args, col.Type))" Style="width: 100%" />
+                    }
+                    else
+                    {
+                        <RadzenTextBox Value="@(dict.ContainsKey(col.Name) ? dict[col.Name]?.ToString() : "")"
+                            Change="@(args => dict[col.Name] = args)" Style="width:100%" />
+                    }
+                </RadzenStack>
+        }
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="1rem" Class="mt-2">
+        <RadzenButton Text="Add" Icon="add" ButtonStyle="ButtonStyle.Success"
+            Click="@(async () => { await OnAddRow(dict); ds.Close(true); })" />
+        <RadzenButton Text="Cancel" Icon="cancel" ButtonStyle="ButtonStyle.Light"
+            Click="@(() => { ds.Close(false); })" />
+    </RadzenStack>
+</RadzenStack>
+, new DialogOptions() { Width = "600px" });
+    }
+
+    async Task OnUpdateRow(dynamic item)
+    {
+        if (currentConnectionInfo != null && !string.IsNullOrEmpty(currentTableName))
+        {
+            try
+            {
+                using var connection = ConnectionFactory.CreateConnection(currentConnectionInfo);
+                connection.Open();
+                await connection.UpdateAsync(currentTableName, (object)item);
+                NotificationService.Notify(NotificationSeverity.Success, "Saved", "Row updated.");
+            }
+            catch (Exception ex)
+            {
+                NotificationService.Notify(NotificationSeverity.Error, "Error Saving", ex.Message);
+            }
+        }
+    }
+
+    async Task ShowEditDialog(dynamic item)
+    {
+        if (tableColumns == null) return;
+
+        var dict = (IDictionary<string, object>)item;
+
+        var result = await DialogService.OpenAsync<EditRecordDialog>("Edit Row", new Dictionary<string, object>()
+{
+{ "Data", dict },
+{ "Columns", tableColumns }
+}, new DialogOptions() { Width = "600px" });
+
+        if (result == true)
+        {
+            await OnUpdateRow(item); // Item is same as dict ref
+        }
+    }
+    void ShowRowDetails(dynamic item)
+    {
+        var dict = (IDictionary<string, object>)item;
+        DialogService.Open("Row Details", ds =>
+        @<RadzenStack Gap="1rem" Style="max-height: 80vh; overflow: auto; padding: 1rem;">
+        @if (tableColumns != null)
+        {
+            @foreach (var col in tableColumns)
+            {
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Gap="0.5rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2"
+                            Style="width: 150px; flex-shrink: 0; color: var(--rz-text-secondary-color);">@col.Name</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Style="word-break: break-all;">
+                            @(dict.ContainsKey(col.Name) ?
+                                dict[col.Name] : "")
+                        </RadzenText>
+                    </RadzenStack>
+                    <hr class="m-0" />
+            }
+        }
+</RadzenStack>
+, new DialogOptions() { Width = "600px", Resizable = true, Draggable = true });
+    }
+}

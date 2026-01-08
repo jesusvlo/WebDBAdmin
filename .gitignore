@@ -5,3 +5,9 @@
 /.vs
 /WebDBAdmin.Domain/obj
 /WebDBAdmin.Domain/bin/Debug/net9.0
+/WebDBAdmin.Application/bin/Debug/net9.0
+/WebDBAdmin.Application/obj
+/WebDBAdmin.Infrastructure/bin/Debug/net9.0
+/WebDBAdmin.Infrastructure/obj
+/WebDBAdmin.Presentation/bin/Debug/net9.0
+/WebDBAdmin.Presentation/obj

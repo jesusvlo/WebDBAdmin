@@ -1,7 +1,7 @@
 using System.Data;
-using UniversalDBStudio.Domain.Entities;
+using WebDBAdmin.Domain.Entities;
 
-namespace UniversalDBStudio.Domain.Interfaces;
+namespace WebDBAdmin.Domain.Interfaces;
 
 public interface IConnectionFactory
 {

@@ -5,6 +5,12 @@ VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBAdmin.Domain", "WebDBAdmin.Domain\WebDBAdmin.Domain.csproj", "{FFC7CA54-BD10-A229-56F9-E498ED905222}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBAdmin.Application", "WebDBAdmin.Application\WebDBAdmin.Application.csproj", "{EF9705CE-BA76-5E6D-D32B-410AA34BB740}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBAdmin.Infrastructure", "WebDBAdmin.Infrastructure\WebDBAdmin.Infrastructure.csproj", "{90FE383C-2C50-B5A2-45C9-12E11BC15DF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDBAdmin.Presentation", "WebDBAdmin.Presentation\WebDBAdmin.Presentation.csproj", "{6BD8FDD4-8E44-CA8E-3C3B-20DDFDEACDA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{FFC7CA54-BD10-A229-56F9-E498ED905222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFC7CA54-BD10-A229-56F9-E498ED905222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFC7CA54-BD10-A229-56F9-E498ED905222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF9705CE-BA76-5E6D-D32B-410AA34BB740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF9705CE-BA76-5E6D-D32B-410AA34BB740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF9705CE-BA76-5E6D-D32B-410AA34BB740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF9705CE-BA76-5E6D-D32B-410AA34BB740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90FE383C-2C50-B5A2-45C9-12E11BC15DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90FE383C-2C50-B5A2-45C9-12E11BC15DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90FE383C-2C50-B5A2-45C9-12E11BC15DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90FE383C-2C50-B5A2-45C9-12E11BC15DF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD8FDD4-8E44-CA8E-3C3B-20DDFDEACDA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD8FDD4-8E44-CA8E-3C3B-20DDFDEACDA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD8FDD4-8E44-CA8E-3C3B-20DDFDEACDA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD8FDD4-8E44-CA8E-3C3B-20DDFDEACDA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

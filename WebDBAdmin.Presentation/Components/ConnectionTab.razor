@@ -1,0 +1,29 @@
+@using WebDBAdmin.Domain.Entities
+@using WebDBAdmin.Presentation.Components
+
+<RadzenSplitter Orientation="Orientation.Horizontal" Style="height: 100%; border: none;">
+    <RadzenSplitterPane Size="250px" Min="200px" Max="500px" Style="border-right: 1px solid var(--rz-border-color);">
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0" Style="height: 100%; overflow: auto;">
+            <!-- Pass connection and subscribe to selection -->
+            <SchemaBrowser Connection="@Connection" OnTableSelected="@OnTableSelected" />
+        </RadzenStack>
+    </RadzenSplitterPane>
+    <RadzenSplitterPane>
+        <!-- Pass connection and ref to method -->
+        <SqlWorkspace @ref="workspace" Connection="@Connection" />
+    </RadzenSplitterPane>
+</RadzenSplitter>
+
+@code {
+    [Parameter] public ConnectionInfo Connection { get; set; } = null!;
+
+    SqlWorkspace? workspace;
+
+    private async Task OnTableSelected(SchemaBrowser.TableSelectionArgs args)
+    {
+        if (workspace != null)
+        {
+            await workspace.LoadTableAsync(args.Connection, args.TableName);
+        }
+    }
+}

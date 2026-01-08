@@ -1,0 +1,128 @@
+@using WebDBAdmin.Domain.Enums
+@using WebDBAdmin.Domain.Entities
+@inject IConnectionFactory ConnectionFactory
+@inject SessionStateService SessionState
+@inject Radzen.DialogService DialogService
+@inject NotificationService NotificationService
+
+<RadzenStack Gap="1rem" Orientation="Orientation.Vertical" Class="rz-p-sm-12">
+    <RadzenTemplateForm Data="@model" Submit="@((ConnectionInfo args) => OnSubmit(args))">
+        <RadzenStack Gap="1rem">
+            <RadzenFormField Text="Name (Optional)" Variant="Variant.Outlined">
+                <RadzenTextBox @bind-Value="model.Name" Name="Name" />
+            </RadzenFormField>
+
+            <RadzenFormField Text="Database Engine" Variant="Variant.Outlined">
+                <RadzenDropDown @bind-Value="model.Engine" Data="@(Enum.GetValues<DatabaseEngine>())" Name="Engine" />
+            </RadzenFormField>
+
+            <RadzenFormField Text="Server" Variant="Variant.Outlined">
+                <RadzenTextBox @bind-Value="model.Server" Name="Server" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Server" Text="Server is required" />
+
+            <RadzenFormField Text="Port (Optional)" Variant="Variant.Outlined">
+                <RadzenNumeric @bind-Value="model.Port" Name="Port" />
+            </RadzenFormField>
+
+            <RadzenFormField Text="Database (Optional)" Variant="Variant.Outlined">
+                <RadzenTextBox @bind-Value="model.Database" Name="Database" />
+            </RadzenFormField>
+
+            <RadzenFormField Text="Username" Variant="Variant.Outlined">
+                <RadzenTextBox @bind-Value="model.Username" Name="Username" />
+            </RadzenFormField>
+            <RadzenRequiredValidator Component="Username" Text="Username is required" />
+
+            <RadzenFormField Text="Password" Variant="Variant.Outlined">
+                <RadzenTextBox @bind-Value="model.Password" Name="Password" type="password" />
+            </RadzenFormField>
+
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="1rem"
+                Class="rz-mt-2">
+                @if (SaveMode)
+                {
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Save" Icon="save" ButtonStyle="ButtonStyle.Primary"
+                        IsBusy="@isBusy" />
+                }
+                else
+                {
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Connect" Icon="link"
+                        ButtonStyle="ButtonStyle.Primary" IsBusy="@isBusy" />
+                }
+                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Click="@(_ => DialogService.Close(null))" />
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenStack>
+
+@code {
+    [Parameter] public ConnectionInfo? Connection { get; set; }
+    [Parameter] public bool SaveMode { get; set; } = false;
+
+    ConnectionInfo model = new ConnectionInfo();
+    bool isBusy = false;
+
+    protected override void OnInitialized()
+    {
+        if (Connection != null)
+        {
+            // Shallow copy for editing to avoid modifying parent list directly until saved
+            model = new ConnectionInfo
+            {
+                Id = Connection.Id,
+                Name = Connection.Name,
+                Engine = Connection.Engine,
+                Server = Connection.Server,
+                Port = Connection.Port,
+                Database = Connection.Database,
+                Username = Connection.Username,
+                Password = Connection.Password,
+                TrustedConnection = Connection.TrustedConnection
+            };
+        }
+    }
+
+    async Task OnSubmit(ConnectionInfo args)
+    {
+        isBusy = true;
+        try
+        {
+            // Always validate connection before proceeding?
+            // Maybe not strictly required for "Save" but good practice to ensure it works.
+            // Let's just try to connect.
+            // Please note: Open() is synchronous on IDbConnection.
+            // For async, we can check if it's DbConnection.
+            using var connection = ConnectionFactory.CreateConnection(model);
+            if (connection is System.Data.Common.DbConnection dbConn)
+            {
+                await dbConn.OpenAsync();
+            }
+            else
+            {
+                connection.Open();
+            }
+
+            if (SaveMode)
+            {
+                // Return the model to the caller to handle saving
+                DialogService.Close(model);
+            }
+            else
+            {
+                // Update Session State (Connect Now behavior)
+                SessionState.SetConnection(model);
+                NotificationService.Notify(NotificationSeverity.Success, "Connected", $"Successfully connected to {model.Server}");
+                DialogService.Close(true); // Return true to indicate success
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(NotificationSeverity.Error, "Connection Failed", ex.Message);
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+}

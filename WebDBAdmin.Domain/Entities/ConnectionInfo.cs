@@ -1,6 +1,6 @@
-using UniversalDBStudio.Domain.Enums;
+using WebDBAdmin.Domain.Enums;
 
-namespace UniversalDBStudio.Domain.Entities;
+namespace WebDBAdmin.Domain.Entities;
 
 public class ConnectionInfo
 {

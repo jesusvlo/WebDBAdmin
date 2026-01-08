@@ -1,0 +1,21 @@
+﻿@inherits LayoutComponentBase
+@inject Radzen.DialogService DialogService
+@inject ContextMenuService ContextMenuService
+@inject NotificationService NotificationService
+@using WebDBAdmin.Presentation.Components
+
+<RadzenComponents />
+
+<RadzenLayout
+    Style="height: 100vh; grid-template-columns: 1fr; grid-template-rows: auto 1fr; grid-template-areas: 'rz-header' 'rz-body';">
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0" Style="height: 100%;">
+            <RadzenLabel Text="UniversalDB Studio" Style="font-size: 1rem; margin-left: 1rem;" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenBody Style="padding: 0; overflow: hidden;">
+        <RadzenStack Style="height: 100%; width: 100%; overflow: hidden;">
+            @Body
+        </RadzenStack>
+    </RadzenBody>
+</RadzenLayout>

@@ -1,4 +1,4 @@
-namespace UniversalDBStudio.Domain.Enums;
+namespace WebDBAdmin.Domain.Enums;
 
 public enum DatabaseEngine
 {

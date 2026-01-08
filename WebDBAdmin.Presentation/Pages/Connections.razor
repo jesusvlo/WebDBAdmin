@@ -1,0 +1,132 @@
+@page "/connections"
+@using WebDBAdmin.Application.Interfaces
+@using WebDBAdmin.Domain.Entities
+@using WebDBAdmin.Presentation.Components
+@inject IConnectionService ConnectionService
+@inject Radzen.DialogService DialogService
+@inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
+@inject SessionStateService SessionState
+@inject IConnectionFactory ConnectionFactory
+
+<PageTitle>Connections</PageTitle>
+
+<RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+        JustifyContent="JustifyContent.SpaceBetween">
+        <RadzenText TextStyle="TextStyle.H4">Stored Connections</RadzenText>
+        <RadzenButton Icon="add" Text="Add Connection" ButtonStyle="ButtonStyle.Primary" Click="@AddConnection" />
+    </RadzenStack>
+
+    <RadzenDataGrid Data="@connections" TItem="ConnectionInfo" AllowSorting="true" AllowFiltering="true">
+        <Columns>
+            <RadzenDataGridColumn TItem="ConnectionInfo" Property="Name" Title="Name">
+                <Template Context="data">
+                    @(string.IsNullOrEmpty(data.Name) ? $"{data.Server} ({data.Database})" : data.Name)
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ConnectionInfo" Property="Engine" Title="Engine" Width="120px" />
+            <RadzenDataGridColumn TItem="ConnectionInfo" Property="Server" Title="Server" />
+            <RadzenDataGridColumn TItem="ConnectionInfo" Property="Database" Title="Database" />
+            <RadzenDataGridColumn TItem="ConnectionInfo" Property="Username" Title="User" />
+            <RadzenDataGridColumn TItem="ConnectionInfo" Context="data" Filterable="false" Sortable="false"
+                TextAlign="TextAlign.Center" Width="220px">
+                <Template Context="data">
+                    <RadzenButton Icon="login" ButtonStyle="ButtonStyle.Success" Variant="Radzen.Variant.Flat"
+                        Size="ButtonSize.Medium" Click="@(() => OpenConnection(data))" Class="me-1"
+                        Tooltip="Open Connection" />
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Radzen.Variant.Flat"
+                        Size="ButtonSize.Medium" Click="@(() => EditConnection(data))" Class="me-1" />
+                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Radzen.Variant.Flat"
+                        Size="ButtonSize.Medium" Click="@(() => DeleteConnection(data))" />
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenStack>
+
+@code {
+    List<ConnectionInfo> connections = new List<ConnectionInfo>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadConnections();
+    }
+
+    async Task LoadConnections()
+    {
+        connections = await ConnectionService.GetAllAsync();
+    }
+
+    async Task AddConnection()
+    {
+        var result = await DialogService.OpenAsync<ConnectionDialog>("Add Connection",
+        new Dictionary<string, object> { { "SaveMode", true } },
+        new Radzen.DialogOptions() { Width = "500px" });
+
+        if (result is ConnectionInfo newConnection)
+        {
+            await ConnectionService.SaveAsync(newConnection);
+            NotificationService.Notify(NotificationSeverity.Success, "Saved", "Connection saved successfully.");
+            await LoadConnections();
+        }
+    }
+
+    async Task EditConnection(ConnectionInfo connection)
+    {
+        var result = await DialogService.OpenAsync<ConnectionDialog>("Edit Connection",
+        new Dictionary<string, object> { { "SaveMode", true }, { "Connection", connection } },
+        new Radzen.DialogOptions() { Width = "500px" });
+
+        if (result is ConnectionInfo updatedConnection)
+        {
+            await ConnectionService.SaveAsync(updatedConnection);
+            NotificationService.Notify(NotificationSeverity.Success, "Saved", "Connection updated successfully.");
+            await LoadConnections();
+        }
+    }
+
+    async Task DeleteConnection(ConnectionInfo connection)
+    {
+        var result = await DialogService.Confirm("Are you sure?", "Delete Connection", new Radzen.ConfirmOptions()
+        {
+            OkButtonText = "Yes",
+            CancelButtonText = "No"
+        });
+        if (result == true)
+        {
+            await ConnectionService.DeleteAsync(connection.Id);
+            NotificationService.Notify(NotificationSeverity.Success, "Deleted", "Connection deleted.");
+            await LoadConnections();
+        }
+    }
+
+    [Parameter] public EventCallback<ConnectionInfo> OnConnectionOpen { get; set; }
+
+    async Task OpenConnection(ConnectionInfo connection)
+    {
+        try
+        {
+            // Verify connection
+            using var dbConnection = ConnectionFactory.CreateConnection(connection);
+            dbConnection.Open(); // IDbConnection.Open is void, usually sufficient to test.
+                                 // If we want async open, we need to cast to DbConnection but not strictly required for this test.
+
+            SessionState.SetConnection(connection);
+            NotificationService.Notify(NotificationSeverity.Success, "Connected", $"Connected to {connection.Server}");
+
+            if (OnConnectionOpen.HasDelegate)
+            {
+                await OnConnectionOpen.InvokeAsync(connection);
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/"); // Navigate to SqlWorkspace (Home)
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(NotificationSeverity.Error, "Connection Failed", ex.Message);
+        }
+    }
+}
