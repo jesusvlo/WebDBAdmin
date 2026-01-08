@@ -1,0 +1,7 @@
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/WebDBAdmin.Domain/obj
+/WebDBAdmin.Domain/bin/Debug/net9.0
