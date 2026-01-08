@@ -22,7 +22,7 @@
                     <RadzenIcon Icon="storage" Style="vertical-align: middle; margin-right: 0.5rem;" />
                     <span class="rz-tabview-title"
                         style="vertical-align: middle; margin-right: 0.5rem; display: inline-block;">
-                        @(conn.Name ?? conn.Database ?? "Connection")
+                        @(conn.Name ?? conn.Database ?? Loc["Connection"])
                     </span>
                     <span @onclick:stopPropagation="true" @onclick="@(() => CloseTab(conn))"
                         style="cursor: pointer; vertical-align: middle; display: inline-flex; align-items: center;">

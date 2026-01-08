@@ -4,37 +4,38 @@
 @inject SessionStateService SessionState
 @inject Radzen.DialogService DialogService
 @inject NotificationService NotificationService
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WebDBAdmin.Presentation.Resources.SharedResource> Loc
 
 <RadzenStack Gap="1rem" Orientation="Orientation.Vertical" Class="rz-p-sm-12">
     <RadzenTemplateForm Data="@model" Submit="@((ConnectionInfo args) => OnSubmit(args))">
         <RadzenStack Gap="1rem">
-            <RadzenFormField Text="Name (Optional)" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["NameOptional"]" Variant="Variant.Outlined">
                 <RadzenTextBox @bind-Value="model.Name" Name="Name" />
             </RadzenFormField>
 
-            <RadzenFormField Text="Database Engine" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["DatabaseEngine"]" Variant="Variant.Outlined">
                 <RadzenDropDown @bind-Value="model.Engine" Data="@(Enum.GetValues<DatabaseEngine>())" Name="Engine" />
             </RadzenFormField>
 
-            <RadzenFormField Text="Server" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["Server"]" Variant="Variant.Outlined">
                 <RadzenTextBox @bind-Value="model.Server" Name="Server" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="Server" Text="Server is required" />
+            <RadzenRequiredValidator Component="Server" Text="@Loc["ServerRequired"]" />
 
-            <RadzenFormField Text="Port (Optional)" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["PortOptional"]" Variant="Variant.Outlined">
                 <RadzenNumeric @bind-Value="model.Port" Name="Port" />
             </RadzenFormField>
 
-            <RadzenFormField Text="Database (Optional)" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["DatabaseOptional"]" Variant="Variant.Outlined">
                 <RadzenTextBox @bind-Value="model.Database" Name="Database" />
             </RadzenFormField>
 
-            <RadzenFormField Text="Username" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["Username"]" Variant="Variant.Outlined">
                 <RadzenTextBox @bind-Value="model.Username" Name="Username" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="Username" Text="Username is required" />
+            <RadzenRequiredValidator Component="Username" Text="@Loc["UsernameRequired"]" />
 
-            <RadzenFormField Text="Password" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["Password"]" Variant="Variant.Outlined">
                 <RadzenTextBox @bind-Value="model.Password" Name="Password" type="password" />
             </RadzenFormField>
 
@@ -42,15 +43,15 @@
                 Class="rz-mt-2">
                 @if (SaveMode)
                 {
-                    <RadzenButton ButtonType="ButtonType.Submit" Text="Save" Icon="save" ButtonStyle="ButtonStyle.Primary"
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="@Loc["Save"]" Icon="save" ButtonStyle="ButtonStyle.Primary"
                         IsBusy="@isBusy" />
                 }
                 else
                 {
-                    <RadzenButton ButtonType="ButtonType.Submit" Text="Connect" Icon="link"
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="@Loc["Connect"]" Icon="link"
                         ButtonStyle="ButtonStyle.Primary" IsBusy="@isBusy" />
                 }
-                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Click="@(_ => DialogService.Close(null))" />
+                <RadzenButton Text="@Loc["Cancel"]" ButtonStyle="ButtonStyle.Light" Click="@(_ => DialogService.Close(null))" />
             </RadzenStack>
         </RadzenStack>
     </RadzenTemplateForm>
@@ -112,13 +113,13 @@
             {
                 // Update Session State (Connect Now behavior)
                 SessionState.SetConnection(model);
-                NotificationService.Notify(NotificationSeverity.Success, "Connected", $"Successfully connected to {model.Server}");
+                NotificationService.Notify(NotificationSeverity.Success, Loc["Connected"], $"{Loc["SuccessfullyConnectedTo"]} {model.Server}");
                 DialogService.Close(true); // Return true to indicate success
             }
         }
         catch (Exception ex)
         {
-            NotificationService.Notify(NotificationSeverity.Error, "Connection Failed", ex.Message);
+            NotificationService.Notify(NotificationSeverity.Error, Loc["ConnectionFailed"], ex.Message);
         }
         finally
         {

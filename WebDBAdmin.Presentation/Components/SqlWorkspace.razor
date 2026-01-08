@@ -19,6 +19,7 @@
 @inject DialogService DialogService
 @inject NavigationManager NavigationManager
 @inject SessionStateService SessionState
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WebDBAdmin.Presentation.Resources.SharedResource> Loc
 
 @implements IDisposable
 
@@ -29,14 +30,14 @@
             JustifyContent="JustifyContent.SpaceBetween" Class="rz-p-1"
             Style="border-bottom: 1px solid var(--rz-border-color);">
             <RadzenText TextStyle="TextStyle.Subtitle2" Class="m-0">
-                @(string.IsNullOrEmpty(currentTableName) ? "No Table Selected" : currentTableName)
+                @(string.IsNullOrEmpty(currentTableName) ? Loc["NoTableSelected"] : currentTableName)
             </RadzenText>
             @if (tableColumns != null)
             {
                 <RadzenButton Icon="add" Click="@ShowAddDialog" ButtonStyle="ButtonStyle.Success"
-                    Size="ButtonSize.ExtraSmall" Text="Add Record" Variant="Variant.Flat" Class="me-1" />
+                    Size="ButtonSize.ExtraSmall" Text="@Loc["AddRecord"]" Variant="Variant.Flat" Class="me-1" />
                 <RadzenButton Icon="refresh" Click="@RefreshData" ButtonStyle="ButtonStyle.Light"
-                    Size="ButtonSize.ExtraSmall" Text="Refresh" Variant="Variant.Text" />
+                    Size="ButtonSize.ExtraSmall" Text="@Loc["Refresh"]" Variant="Variant.Text" />
             }
         </RadzenStack>
 
@@ -84,8 +85,7 @@
             <RadzenStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Style="height: 100%">
                 <RadzenIcon Icon="table_view" Style="font-size: 4rem; color: var(--rz-text-disabled-color);" />
                 <RadzenText TextStyle="TextStyle.Body1" Style="color: var(--rz-text-disabled-color);">
-                    Select a table from
-                    the Schema Browser to view data.
+                    @Loc["SelectTableMessage"]
                 </RadzenText>
             </RadzenStack>
         }
@@ -365,7 +365,7 @@
         catch (Exception ex)
         {
             error = ex.Message;
-            NotificationService.Notify(NotificationSeverity.Error, "Error Loading Table", ex.Message);
+            NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorSaving"], ex.Message);
         }
         finally
         {
@@ -398,14 +398,14 @@
                 connection.Open();
                 // RepoDB InsertAsync usually returns the ID of inserted row
                 await connection.InsertAsync(currentTableName, (object)item);
-                NotificationService.Notify(NotificationSeverity.Success, "Added", "Row inserted successfully.");
+                NotificationService.Notify(NotificationSeverity.Success, Loc["Add"], Loc["RowInserted"]);
 
                 // Refresh data to show new row
                 RefreshData();
             }
             catch (Exception ex)
             {
-                NotificationService.Notify(NotificationSeverity.Error, "Error Adding", ex.Message);
+                NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorAdding"], ex.Message);
             }
         }
     }
@@ -420,7 +420,7 @@
         // Initialize fields if necessary (optional)
         // Note: We don't need to preset keys for Insert, RepoDB handles it.
 
-        await DialogService.OpenAsync("Add New Record", ds =>
+        await DialogService.OpenAsync(Loc["AddNewRecord"], ds =>
         @<RadzenStack Gap="1rem" Style="padding: 1rem;">
         @foreach (var col in tableColumns)
         {
@@ -463,9 +463,9 @@
                 </RadzenStack>
         }
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="1rem" Class="mt-2">
-        <RadzenButton Text="Add" Icon="add" ButtonStyle="ButtonStyle.Success"
+        <RadzenButton Text="@Loc["Add"]" Icon="add" ButtonStyle="ButtonStyle.Success"
             Click="@(async () => { await OnAddRow(dict); ds.Close(true); })" />
-        <RadzenButton Text="Cancel" Icon="cancel" ButtonStyle="ButtonStyle.Light"
+        <RadzenButton Text="@Loc["Cancel"]" Icon="cancel" ButtonStyle="ButtonStyle.Light"
             Click="@(() => { ds.Close(false); })" />
     </RadzenStack>
 </RadzenStack>
@@ -481,11 +481,11 @@
                 using var connection = ConnectionFactory.CreateConnection(currentConnectionInfo);
                 connection.Open();
                 await connection.UpdateAsync(currentTableName, (object)item);
-                NotificationService.Notify(NotificationSeverity.Success, "Saved", "Row updated.");
+                NotificationService.Notify(NotificationSeverity.Success, Loc["Saved"], Loc["RowUpdated"]);
             }
             catch (Exception ex)
             {
-                NotificationService.Notify(NotificationSeverity.Error, "Error Saving", ex.Message);
+                NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorSaving"], ex.Message);
             }
         }
     }
@@ -496,7 +496,7 @@
 
         var dict = (IDictionary<string, object>)item;
 
-        var result = await DialogService.OpenAsync<EditRecordDialog>("Edit Row", new Dictionary<string, object>()
+        var result = await DialogService.OpenAsync<EditRecordDialog>(Loc["EditRow"], new Dictionary<string, object>()
 {
 { "Data", dict },
 { "Columns", tableColumns }
@@ -510,7 +510,7 @@
     void ShowRowDetails(dynamic item)
     {
         var dict = (IDictionary<string, object>)item;
-        DialogService.Open("Row Details", ds =>
+        DialogService.Open(Loc["RowDetails"], ds =>
         @<RadzenStack Gap="1rem" Style="max-height: 80vh; overflow: auto; padding: 1rem;">
         @if (tableColumns != null)
         {

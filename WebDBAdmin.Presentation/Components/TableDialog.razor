@@ -2,45 +2,46 @@
 @using WebDBAdmin.Domain.Enums
 @using Radzen
 @using Radzen.Blazor
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WebDBAdmin.Presentation.Resources.SharedResource> Loc
 
 <RadzenStack Gap="1rem" Orientation="Orientation.Vertical" Style="padding: 1rem;">
     <RadzenTemplateForm TItem="TableDefinition" Data="@TableDefinition" Submit="@OnSubmit">
         <RadzenStack Gap="1rem">
-            <RadzenFormField Text="Table Name" Variant="Variant.Outlined">
+            <RadzenFormField Text="@Loc["TableName"]" Variant="Variant.Outlined">
                 <RadzenTextBox @bind-Value="@TableDefinition.Name" Name="TableName" Style="width: 100%;"
                     Disabled="@IsModification" />
             </RadzenFormField>
-            <RadzenRequiredValidator Component="TableName" Text="Table name is required" />
+            <RadzenRequiredValidator Component="TableName" Text="@Loc["TableNameRequired"]" />
 
-            <RadzenText TextStyle="TextStyle.Subtitle1">Columns</RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1">@Loc["Columns"]</RadzenText>
 
             <RadzenDataGrid @ref="columnsGrid" Data="@TableDefinition.Columns" TItem="ColumnDefinition"
                 AllowSorting="false" AllowFiltering="false" AllowPaging="false" Density="Density.Compact">
                 <Columns>
-                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Name" Title="Name">
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Name" Title="@Loc["Name"]">
                         <Template Context="column">
                             <RadzenTextBox @bind-Value="column.Name" Style="width: 100%" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Type" Title="Type">
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Type" Title="@Loc["Type"]">
                         <Template Context="column">
                             <RadzenDropDown @bind-Value="column.Type" Data="@GetDataTypes()" Style="width: 100%"
                                 AllowClear="false" AllowFiltering="true" TextProperty="Name" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Length" Title="Length/Size" Width="100px">
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="Length" Title="@Loc["LengthSize"]" Width="100px">
                         <Template Context="column">
                             <RadzenNumeric @bind-Value="column.Length" ShowUpDown="false" Style="width: 100%" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="IsNullable" Title="Nullable" Width="80px"
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="IsNullable" Title="@Loc["Nullable"]" Width="80px"
                         TextAlign="TextAlign.Center">
                         <Template Context="column">
                             <RadzenCheckBox @bind-Value="column.IsNullable" TValue="bool"
                                 Disabled="@column.IsPrimaryKey" />
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="IsPrimaryKey" Title="PK" Width="60px"
+                    <RadzenDataGridColumn TItem="ColumnDefinition" Property="IsPrimaryKey" Title="@Loc["PK"]" Width="60px"
                         TextAlign="TextAlign.Center">
                         <Template Context="column">
                             <RadzenCheckBox Value="@column.IsPrimaryKey" TValue="bool"
@@ -58,13 +59,13 @@
                 </Columns>
             </RadzenDataGrid>
 
-            <RadzenButton Text="Add Column" Icon="add" ButtonStyle="ButtonStyle.Secondary" Variant="Variant.Outlined"
+            <RadzenButton Text="@Loc["AddColumn"]" Icon="add" ButtonStyle="ButtonStyle.Secondary" Variant="Variant.Outlined"
                 Click="@AddColumn" Size="ButtonSize.Small" />
 
             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
-                <RadzenButton ButtonType="ButtonType.Submit" Text="Save" Icon="save"
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@Loc["Save"]" Icon="save"
                     ButtonStyle="ButtonStyle.Primary" />
-                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Light" Click="@Cancel" />
+                <RadzenButton Text="@Loc["Cancel"]" ButtonStyle="ButtonStyle.Light" Click="@Cancel" />
             </RadzenStack>
         </RadzenStack>
     </RadzenTemplateForm>

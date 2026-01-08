@@ -33,4 +33,64 @@
   <data name="EditConnection" xml:space="preserve"><value>Επεξεργασία σύνδεσης</value></data>
   <data name="OpenConnection" xml:space="preserve"><value>Άνοιγμα σύνδεσης</value></data>
   <data name="DeleteConnection" xml:space="preserve"><value>Διαγραφή σύνδεσης</value></data>
+  <data name="NoTableSelected" xml:space="preserve"><value>Καμία επιλεγμένη πίκανα</value></data>
+  <data name="AddRecord" xml:space="preserve"><value>Προσθήκη εγγραφής</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Ανανέωση</value></data>
+  <data name="SelectTableMessage" xml:space="preserve"><value>Επιλέξτε έναν πίνακα από την περιήγηση σχήματος για να δείτε δεδομένα.</value></data>
+  <data name="RowInserted" xml:space="preserve"><value>Η εγγραφή εισήχθη επιτυχώς.</value></data>
+  <data name="ErrorAdding" xml:space="preserve"><value>Σφάλμα κατά την προσθήκη</value></data>
+  <data name="AddNewRecord" xml:space="preserve"><value>Προσθήκη νέας εγγραφής</value></data>
+  <data name="Add" xml:space="preserve"><value>Προσθήκη</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Ακύρωση</value></data>
+  <data name="RowUpdated" xml:space="preserve"><value>Η εγγραφή ενημερώθηκε.</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Σφάλμα κατά την αποθήκευση</value></data>
+  <data name="EditRow" xml:space="preserve"><value>Επεξεργασία εγγραφής</value></data>
+  <data name="RowDetails" xml:space="preserve"><value>Λεπτομέρειες εγγραφής</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>Όνομα (Προαιρετικό)</value></data>
+  <data name="DatabaseEngine" xml:space="preserve"><value>Μηχανή βάσης δεδομένων</value></data>
+  <data name="ServerRequired" xml:space="preserve"><value>Ο διακομιστής απαιτείται</value></data>
+  <data name="Port" xml:space="preserve"><value>Θύρα</value></data>
+  <data name="PortOptional" xml:space="preserve"><value>Θύρα (Προαιρετικό)</value></data>
+  <data name="DatabaseOptional" xml:space="preserve"><value>Βάση δεδομένων (Προαιρετικό)</value></data>
+  <data name="Username" xml:space="preserve"><value>Όνομα χρήστη</value></data>
+  <data name="UsernameRequired" xml:space="preserve"><value>Το όνομα χρήστη απαιτείται</value></data>
+  <data name="Password" xml:space="preserve"><value>Κωδικός πρόσβασης</value></data>
+  <data name="Connect" xml:space="preserve"><value>Σύνδεση</value></data>
+  <data name="SuccessfullyConnectedTo" xml:space="preserve"><value>Επιτυχής σύνδεση σε</value></data>
+  <data name="TableName" xml:space="preserve"><value>Όνομα πίνακα</value></data>
+  <data name="TableNameRequired" xml:space="preserve"><value>Το όνομα πίνακα απαιτείται</value></data>
+  <data name="Columns" xml:space="preserve"><value>Στήλες</value></data>
+  <data name="Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="LengthSize" xml:space="preserve"><value>Μήκος/Μέγεθος</value></data>
+  <data name="Nullable" xml:space="preserve"><value>Nullable</value></data>
+  <data name="PK" xml:space="preserve"><value>PK</value></data>
+  <data name="AddColumn" xml:space="preserve"><value>Προσθήκη στήλης</value></data>
+  <data name="BinaryDataReadOnly" xml:space="preserve"><value>Δυαδικά δεδομένα (Μόνο για ανάγνωση)</value></data>
+  <data name="Null" xml:space="preserve"><value>Null</value></data>
+  <data name="NoActiveConnection" xml:space="preserve"><value>Καμία ενεργή σύνδεση</value></data>
+  <data name="CreateTable" xml:space="preserve"><value>Δημιουργία πίνακα</value></data>
+  <data name="SelectAllRows" xml:space="preserve"><value>Επιλογή όλων των γραμμών</value></data>
+  <data name="ModifyTable" xml:space="preserve"><value>Τροποποίηση πίνακα</value></data>
+  <data name="DropTable" xml:space="preserve"><value>Διαγραφή πίνακα</value></data>
+  <data name="Properties" xml:space="preserve"><value>Ιδιότητες</value></data>
+  <data name="TableLoaded" xml:space="preserve"><value>Πίνακας φορτώθηκε</value></data>
+  <data name="LoadingTableData" xml:space="preserve"><value>Φόρτωση δεδομένων πίνακα για</value></data>
+  <data name="TableCreatedSuccess" xml:space="preserve"><value>Ο πίνακας '{0}' δημιουργήθηκε επιτυχώς.</value></data>
+  <data name="ErrorCreatingTable" xml:space="preserve"><value>Σφάλμα κατά τη δημιουργία πίνακα</value></data>
+  <data name="ConfirmDataLoss" xml:space="preserve"><value>Επιβεβαίωση απώλειας δεδομένων</value></data>
+  <data name="DataLossWarning" xml:space="preserve"><value>Οι ακόλουθες στήλες έχουν τροποποιηθεί:\n\n{0}\n\nΗ εφαρμογή αυτών των αλλαγών θα ΔΙΑΓΡΑΨΕΙ και θα ΕΠΑΝΑΔΗΜΙΟΥΡΓΗΣΕΙ αυτές τις στήλες, οδηγώντας σε ΑΠΩΛΕΙΑ ΔΕΔΟΜΕΝΩΝ για αυτές τις συγκεκριμένες στήλες.\nΕίστε σίγουροι ότι θέλετε να συνεχίσετε;</value></data>
+  <data name="YesUnderstand" xml:space="preserve"><value>Ναι, καταλαβαίνω</value></data>
+  <data name="ModificationsCancelled" xml:space="preserve"><value>Οι τροποποιήσεις των στηλών ακυρώθηκαν. Άλλες αλλαγές (προσθήκες/διαγραφές/μετονομασίες) εάν υπήρχαν, υποβλήθηκαν σε επεξεργασία.</value></data>
+  <data name="TableModifiedSuccess" xml:space="preserve"><value>Ο πίνακας '{0}' τροποποιήθηκε επιτυχώς.</value></data>
+  <data name="ErrorModifyingTable" xml:space="preserve"><value>Σφάλμα κατά την τροποποίηση του πίνακα</value></data>
+  <data name="DropTableConfirmation" xml:space="preserve"><value>Είστε σίγουροι ότι θέλετε να διαγράψετε τον πίνακα '{0}'; Αυτό δεν μπορεί να αναιρεθεί.</value></data>
+  <data name="TableDroppedSuccess" xml:space="preserve"><value>Ο πίνακας '{0}' διαγράφηκε.</value></data>
+  <data name="ErrorDroppingTable" xml:space="preserve"><value>Σφάλμα κατά τη διαγραφή του πίνακα</value></data>
+  <data name="DatabaseEmpty" xml:space="preserve"><value>Η βάση δεδομένων είναι άδεια</value></data>
+  <data name="NoTablesFound" xml:space="preserve"><value>Δεν βρέθηκαν πίνακες στη βάση δεδομένων '{0}'</value></data>
+  <data name="ErrorExpandingNode" xml:space="preserve"><value>Σφάλμα κατά την επέκταση του κόμβου</value></data>
+  <data name="Success" xml:space="preserve"><value>Επιτυχία</value></data>
+  <data name="Error" xml:space="preserve"><value>Σφάλμα</value></data>
+  <data name="Cancelled" xml:space="preserve"><value>Ακυρώθηκε</value></data>
+  <data name="Connection" xml:space="preserve"><value>Σύνδεση</value></data>
 </root>

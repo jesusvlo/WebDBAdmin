@@ -6,6 +6,7 @@
 @inject ContextMenuService ContextMenuService
 @inject ITableService TableService
 @inject DialogService DialogService
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WebDBAdmin.Presentation.Resources.SharedResource> Loc
 
 <RadzenCard Style="height: 100%; overflow: auto;">
     @if (SessionState.IsConnected)
@@ -36,7 +37,7 @@
     else
     {
         <div class="rz-p-2">
-            <RadzenText TextStyle="TextStyle.Body2">No Active Connection</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body2">@Loc["NoActiveConnection"]</RadzenText>
         </div>
     }
 </RadzenCard>

@@ -33,4 +33,64 @@
   <data name="EditConnection" xml:space="preserve"><value>Rediger tilkobling</value></data>
   <data name="OpenConnection" xml:space="preserve"><value>Åpne tilkobling</value></data>
   <data name="DeleteConnection" xml:space="preserve"><value>Slett tilkobling</value></data>
+  <data name="NoTableSelected" xml:space="preserve"><value>Ingen tabell valgt</value></data>
+  <data name="AddRecord" xml:space="preserve"><value>Legg til rad</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Oppdater</value></data>
+  <data name="SelectTableMessage" xml:space="preserve"><value>Velg en tabell fra skjemaleseren for å vise data.</value></data>
+  <data name="RowInserted" xml:space="preserve"><value>Rad lagt til.</value></data>
+  <data name="ErrorAdding" xml:space="preserve"><value>Feil ved tillegging</value></data>
+  <data name="AddNewRecord" xml:space="preserve"><value>Legg til ny rad</value></data>
+  <data name="Add" xml:space="preserve"><value>Legg til</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Avbryt</value></data>
+  <data name="RowUpdated" xml:space="preserve"><value>Rad oppdatert.</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Feil ved lagring</value></data>
+  <data name="EditRow" xml:space="preserve"><value>Rediger rad</value></data>
+  <data name="RowDetails" xml:space="preserve"><value>Raddetaljer</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>Navn (Valgfritt)</value></data>
+  <data name="DatabaseEngine" xml:space="preserve"><value>Databasemotor</value></data>
+  <data name="ServerRequired" xml:space="preserve"><value>Server er påkrevd</value></data>
+  <data name="Port" xml:space="preserve"><value>Port</value></data>
+  <data name="PortOptional" xml:space="preserve"><value>Port (Valgfritt)</value></data>
+  <data name="DatabaseOptional" xml:space="preserve"><value>Database (Valgfritt)</value></data>
+  <data name="Username" xml:space="preserve"><value>Brukernavn</value></data>
+  <data name="UsernameRequired" xml:space="preserve"><value>Brukernavn er påkrevd</value></data>
+  <data name="Password" xml:space="preserve"><value>Passord</value></data>
+  <data name="Connect" xml:space="preserve"><value>Koble til</value></data>
+  <data name="SuccessfullyConnectedTo" xml:space="preserve"><value>Vellykket tilkobling til</value></data>
+  <data name="TableName" xml:space="preserve"><value>Tabellnavn</value></data>
+  <data name="TableNameRequired" xml:space="preserve"><value>Tabellnavn er påkrevd</value></data>
+  <data name="Columns" xml:space="preserve"><value>Kolonner</value></data>
+  <data name="Type" xml:space="preserve"><value>Type</value></data>
+  <data name="LengthSize" xml:space="preserve"><value>Lengde/Størrelse</value></data>
+  <data name="Nullable" xml:space="preserve"><value>Nullbar</value></data>
+  <data name="PK" xml:space="preserve"><value>PK</value></data>
+  <data name="AddColumn" xml:space="preserve"><value>Legg til kolonne</value></data>
+  <data name="BinaryDataReadOnly" xml:space="preserve"><value>Binære data (Kun les)</value></data>
+  <data name="Null" xml:space="preserve"><value>Null</value></data>
+  <data name="NoActiveConnection" xml:space="preserve"><value>Ingen aktiv tilkobling</value></data>
+  <data name="CreateTable" xml:space="preserve"><value>Opprett tabell</value></data>
+  <data name="SelectAllRows" xml:space="preserve"><value>Velg alle rader</value></data>
+  <data name="ModifyTable" xml:space="preserve"><value>Endre tabell</value></data>
+  <data name="DropTable" xml:space="preserve"><value>Slett tabell</value></data>
+  <data name="Properties" xml:space="preserve"><value>Egenskaper</value></data>
+  <data name="TableLoaded" xml:space="preserve"><value>Tabell lastet</value></data>
+  <data name="LoadingTableData" xml:space="preserve"><value>Laster tabelldata for</value></data>
+  <data name="TableCreatedSuccess" xml:space="preserve"><value>Tabell '{0}' opprettet.</value></data>
+  <data name="ErrorCreatingTable" xml:space="preserve"><value>Feil ved oppretting av tabell</value></data>
+  <data name="ConfirmDataLoss" xml:space="preserve"><value>Bekreft datatap</value></data>
+  <data name="DataLossWarning" xml:space="preserve"><value>Følgende kolonner er endret:\n\n{0}\n\nHvis du bruker disse endringene, vil disse kolonnene slettes og opprettes på nytt, noe som fører til DATATAP for disse spesifikke kolonnene.\nEr du sikker på at du vil fortsette?</value></data>
+  <data name="YesUnderstand" xml:space="preserve"><value>Ja, jeg forstår</value></data>
+  <data name="ModificationsCancelled" xml:space="preserve"><value>Kolonneendringene ble avbrutt. Andre endringer (tillegg/slettinger/navneendringer) ble behandlet hvis det var noen.</value></data>
+  <data name="TableModifiedSuccess" xml:space="preserve"><value>Tabell '{0}' endret.</value></data>
+  <data name="ErrorModifyingTable" xml:space="preserve"><value>Feil ved endring av tabell</value></data>
+  <data name="DropTableConfirmation" xml:space="preserve"><value>Er du sikker på at du vil slette tabellen '{0}'? Dette kan ikke angres.</value></data>
+  <data name="TableDroppedSuccess" xml:space="preserve"><value>Tabell '{0}' slettet.</value></data>
+  <data name="ErrorDroppingTable" xml:space="preserve"><value>Feil ved sletting av tabell</value></data>
+  <data name="DatabaseEmpty" xml:space="preserve"><value>Database tom</value></data>
+  <data name="NoTablesFound" xml:space="preserve"><value>Ingen tabeller funnet i databasen '{0}'</value></data>
+  <data name="ErrorExpandingNode" xml:space="preserve"><value>Feil ved utvidelse av node</value></data>
+  <data name="Success" xml:space="preserve"><value>Suksess</value></data>
+  <data name="Error" xml:space="preserve"><value>Feil</value></data>
+  <data name="Cancelled" xml:space="preserve"><value>Avbrutt</value></data>
+  <data name="Connection" xml:space="preserve"><value>Tilkobling</value></data>
 </root>

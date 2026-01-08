@@ -33,4 +33,64 @@
   <data name="EditConnection" xml:space="preserve"><value>Editar conexão</value></data>
   <data name="OpenConnection" xml:space="preserve"><value>Abrir conexão</value></data>
   <data name="DeleteConnection" xml:space="preserve"><value>Excluir conexão</value></data>
+  <data name="NoTableSelected" xml:space="preserve"><value>Nenhuma tabela selecionada</value></data>
+  <data name="AddRecord" xml:space="preserve"><value>Adicionar registro</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Atualizar</value></data>
+  <data name="SelectTableMessage" xml:space="preserve"><value>Selecione uma tabela do navegador de esquema para visualizar os dados.</value></data>
+  <data name="RowInserted" xml:space="preserve"><value>Registro inserido com sucesso.</value></data>
+  <data name="ErrorAdding" xml:space="preserve"><value>Erro ao adicionar</value></data>
+  <data name="AddNewRecord" xml:space="preserve"><value>Adicionar novo registro</value></data>
+  <data name="Add" xml:space="preserve"><value>Adicionar</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="RowUpdated" xml:space="preserve"><value>Registro atualizado.</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Erro ao salvar</value></data>
+  <data name="EditRow" xml:space="preserve"><value>Editar registro</value></data>
+  <data name="RowDetails" xml:space="preserve"><value>Detalhes do registro</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>Nome (Opcional)</value></data>
+  <data name="DatabaseEngine" xml:space="preserve"><value>Motor de banco de dados</value></data>
+  <data name="ServerRequired" xml:space="preserve"><value>O servidor é obrigatório</value></data>
+  <data name="Port" xml:space="preserve"><value>Porta</value></data>
+  <data name="PortOptional" xml:space="preserve"><value>Porta (Opcional)</value></data>
+  <data name="DatabaseOptional" xml:space="preserve"><value>Banco de dados (Opcional)</value></data>
+  <data name="Username" xml:space="preserve"><value>Nome de usuário</value></data>
+  <data name="UsernameRequired" xml:space="preserve"><value>O nome de usuário é obrigatório</value></data>
+  <data name="Password" xml:space="preserve"><value>Senha</value></data>
+  <data name="Connect" xml:space="preserve"><value>Conectar</value></data>
+  <data name="SuccessfullyConnectedTo" xml:space="preserve"><value>Conectado com sucesso a</value></data>
+  <data name="TableName" xml:space="preserve"><value>Nome da tabela</value></data>
+  <data name="TableNameRequired" xml:space="preserve"><value>O nome da tabela é obrigatório</value></data>
+  <data name="Columns" xml:space="preserve"><value>Colunas</value></data>
+  <data name="Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="LengthSize" xml:space="preserve"><value>Comprimento/Tamanho</value></data>
+  <data name="Nullable" xml:space="preserve"><value>Anulável</value></data>
+  <data name="PK" xml:space="preserve"><value>PK</value></data>
+  <data name="AddColumn" xml:space="preserve"><value>Adicionar coluna</value></data>
+  <data name="BinaryDataReadOnly" xml:space="preserve"><value>Dados binários (Somente leitura)</value></data>
+  <data name="Null" xml:space="preserve"><value>Nulo</value></data>
+  <data name="NoActiveConnection" xml:space="preserve"><value>Sem conexão ativa</value></data>
+  <data name="CreateTable" xml:space="preserve"><value>Criar tabela</value></data>
+  <data name="SelectAllRows" xml:space="preserve"><value>Selecionar todas as linhas</value></data>
+  <data name="ModifyTable" xml:space="preserve"><value>Modificar tabela</value></data>
+  <data name="DropTable" xml:space="preserve"><value>Excluir tabela</value></data>
+  <data name="Properties" xml:space="preserve"><value>Propriedades</value></data>
+  <data name="TableLoaded" xml:space="preserve"><value>Tabela carregada</value></data>
+  <data name="LoadingTableData" xml:space="preserve"><value>Carregando dados da tabela para</value></data>
+  <data name="TableCreatedSuccess" xml:space="preserve"><value>Tabela '{0}' criada com sucesso.</value></data>
+  <data name="ErrorCreatingTable" xml:space="preserve"><value>Erro ao criar tabela</value></data>
+  <data name="ConfirmDataLoss" xml:space="preserve"><value>Confirmar perda de dados</value></data>
+  <data name="DataLossWarning" xml:space="preserve"><value>As seguintes colunas foram modificadas:\n\n{0}\n\nA aplicação destas alterações EXCLUIRÁ e RECRIARÁ estas colunas, resultando em PERDA DE DADOS para estas colunas específicas.\nTem certeza de que deseja prosseguir?</value></data>
+  <data name="YesUnderstand" xml:space="preserve"><value>Sim, eu entendo</value></data>
+  <data name="ModificationsCancelled" xml:space="preserve"><value>As modificações da coluna foram canceladas. Outras alterações (adições/exclusões/renomeações), se houver, foram processadas.</value></data>
+  <data name="TableModifiedSuccess" xml:space="preserve"><value>Tabela '{0}' modificada com sucesso.</value></data>
+  <data name="ErrorModifyingTable" xml:space="preserve"><value>Erro ao modificar tabela</value></data>
+  <data name="DropTableConfirmation" xml:space="preserve"><value>Tem certeza de que deseja excluir a tabela '{0}'? Isso não pode ser desfeito.</value></data>
+  <data name="TableDroppedSuccess" xml:space="preserve"><value>Tabela '{0}' excluída.</value></data>
+  <data name="ErrorDroppingTable" xml:space="preserve"><value>Erro ao excluir tabela</value></data>
+  <data name="DatabaseEmpty" xml:space="preserve"><value>Banco de dados vazio</value></data>
+  <data name="NoTablesFound" xml:space="preserve"><value>Nenhuma tabela encontrada no banco de dados '{0}'</value></data>
+  <data name="ErrorExpandingNode" xml:space="preserve"><value>Erro ao expandir nó</value></data>
+  <data name="Success" xml:space="preserve"><value>Sucesso</value></data>
+  <data name="Error" xml:space="preserve"><value>Erro</value></data>
+  <data name="Cancelled" xml:space="preserve"><value>Cancelado</value></data>
+  <data name="Connection" xml:space="preserve"><value>Conexão</value></data>
 </root>

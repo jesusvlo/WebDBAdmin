@@ -91,4 +91,64 @@
   <data name="EditConnection" xml:space="preserve"><value>Edit Connection</value></data>
   <data name="OpenConnection" xml:space="preserve"><value>Open Connection</value></data>
   <data name="DeleteConnection" xml:space="preserve"><value>Delete Connection</value></data>
+  <data name="NoTableSelected" xml:space="preserve"><value>No Table Selected</value></data>
+  <data name="AddRecord" xml:space="preserve"><value>Add Record</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="SelectTableMessage" xml:space="preserve"><value>Select a table from the Schema Browser to view data.</value></data>
+  <data name="RowInserted" xml:space="preserve"><value>Row inserted successfully.</value></data>
+  <data name="ErrorAdding" xml:space="preserve"><value>Error Adding</value></data>
+  <data name="AddNewRecord" xml:space="preserve"><value>Add New Record</value></data>
+  <data name="Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="RowUpdated" xml:space="preserve"><value>Row updated.</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Error Saving</value></data>
+  <data name="EditRow" xml:space="preserve"><value>Edit Row</value></data>
+  <data name="RowDetails" xml:space="preserve"><value>Row Details</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>Name (Optional)</value></data>
+  <data name="DatabaseEngine" xml:space="preserve"><value>Database Engine</value></data>
+  <data name="ServerRequired" xml:space="preserve"><value>Server is required</value></data>
+  <data name="Port" xml:space="preserve"><value>Port</value></data>
+  <data name="PortOptional" xml:space="preserve"><value>Port (Optional)</value></data>
+  <data name="DatabaseOptional" xml:space="preserve"><value>Database (Optional)</value></data>
+  <data name="Username" xml:space="preserve"><value>Username</value></data>
+  <data name="UsernameRequired" xml:space="preserve"><value>Username is required</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Connect" xml:space="preserve"><value>Connect</value></data>
+  <data name="SuccessfullyConnectedTo" xml:space="preserve"><value>Successfully connected to</value></data>
+  <data name="TableName" xml:space="preserve"><value>Table Name</value></data>
+  <data name="TableNameRequired" xml:space="preserve"><value>Table name is required</value></data>
+  <data name="Columns" xml:space="preserve"><value>Columns</value></data>
+  <data name="Type" xml:space="preserve"><value>Type</value></data>
+  <data name="LengthSize" xml:space="preserve"><value>Length/Size</value></data>
+  <data name="Nullable" xml:space="preserve"><value>Nullable</value></data>
+  <data name="PK" xml:space="preserve"><value>PK</value></data>
+  <data name="AddColumn" xml:space="preserve"><value>Add Column</value></data>
+  <data name="BinaryDataReadOnly" xml:space="preserve"><value>Binary Data (Read Only)</value></data>
+  <data name="Null" xml:space="preserve"><value>Null</value></data>
+  <data name="NoActiveConnection" xml:space="preserve"><value>No Active Connection</value></data>
+  <data name="CreateTable" xml:space="preserve"><value>Create Table</value></data>
+  <data name="SelectAllRows" xml:space="preserve"><value>Select All Rows</value></data>
+  <data name="ModifyTable" xml:space="preserve"><value>Modify Table</value></data>
+  <data name="DropTable" xml:space="preserve"><value>Drop Table</value></data>
+  <data name="Properties" xml:space="preserve"><value>Properties</value></data>
+  <data name="TableLoaded" xml:space="preserve"><value>Table Loaded</value></data>
+  <data name="LoadingTableData" xml:space="preserve"><value>Loading table data for</value></data>
+  <data name="TableCreatedSuccess" xml:space="preserve"><value>Table '{0}' created successfully.</value></data>
+  <data name="ErrorCreatingTable" xml:space="preserve"><value>Error Creating Table</value></data>
+  <data name="ConfirmDataLoss" xml:space="preserve"><value>Confirm Data Loss</value></data>
+  <data name="DataLossWarning" xml:space="preserve"><value>The following columns have been modified:\n\n{0}\n\nApplying these changes will DROP and RE-CREATE these columns, resulting in DATA LOSS for these specific columns.\nAre you sure you want to proceed?</value></data>
+  <data name="YesUnderstand" xml:space="preserve"><value>Yes, I understand</value></data>
+  <data name="ModificationsCancelled" xml:space="preserve"><value>Column modifications were cancelled. Other changes (adds/drops/renames) if any, were processed.</value></data>
+  <data name="TableModifiedSuccess" xml:space="preserve"><value>Table '{0}' modified successfully.</value></data>
+  <data name="ErrorModifyingTable" xml:space="preserve"><value>Error Modifying Table</value></data>
+  <data name="DropTableConfirmation" xml:space="preserve"><value>Are you sure you want to drop table '{0}'? This cannot be undone.</value></data>
+  <data name="TableDroppedSuccess" xml:space="preserve"><value>Table '{0}' dropped.</value></data>
+  <data name="ErrorDroppingTable" xml:space="preserve"><value>Error Dropping Table</value></data>
+  <data name="DatabaseEmpty" xml:space="preserve"><value>Database Empty</value></data>
+  <data name="NoTablesFound" xml:space="preserve"><value>No tables found in database '{0}'</value></data>
+  <data name="ErrorExpandingNode" xml:space="preserve"><value>Error expanding node</value></data>
+  <data name="Success" xml:space="preserve"><value>Success</value></data>
+  <data name="Error" xml:space="preserve"><value>Error</value></data>
+  <data name="Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Connection" xml:space="preserve"><value>Connection</value></data>
 </root>

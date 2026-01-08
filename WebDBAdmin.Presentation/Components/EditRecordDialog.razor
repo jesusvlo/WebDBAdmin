@@ -5,6 +5,7 @@
 @using WebDBAdmin.Application.DTOs
 
 @inject DialogService DialogService
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WebDBAdmin.Presentation.Resources.SharedResource> Loc
 
 <RadzenStack Gap="1rem" Style="padding: 1rem;">
     @foreach (var col in Columns)
@@ -27,7 +28,7 @@
                 @if (col.Type == typeof(byte[]))
                 {
                     <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-disabled-color); font-style: italic;">
-                        Binary Data (Read Only)
+                        @Loc["BinaryDataReadOnly"]
                     </RadzenText>
                 }
                 else if (col.Type == typeof(bool))
@@ -57,15 +58,15 @@
                 @if (col.IsNullable)
                 {
                     <RadzenCheckBox TValue="bool" Value="@isNull" Change="@(args => SetNull(col, args))" />
-                    <RadzenText Text="Null" Style="white-space: nowrap;" />
+                    <RadzenText Text="@Loc["Null"]" Style="white-space: nowrap;" />
                 }
             </RadzenStack>
         </RadzenStack>
     }
 
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="1rem" Class="mt-2">
-        <RadzenButton Text="Save" Icon="save" ButtonStyle="ButtonStyle.Primary" Click="@Save" />
-        <RadzenButton Text="Cancel" Icon="cancel" ButtonStyle="ButtonStyle.Light" Click="@Cancel" />
+        <RadzenButton Text="@Loc["Save"]" Icon="save" ButtonStyle="ButtonStyle.Primary" Click="@Save" />
+        <RadzenButton Text="@Loc["Cancel"]" Icon="cancel" ButtonStyle="ButtonStyle.Light" Click="@Cancel" />
     </RadzenStack>
 </RadzenStack>
 

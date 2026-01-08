@@ -33,4 +33,64 @@
   <data name="EditConnection" xml:space="preserve"><value>Modifica connessione</value></data>
   <data name="OpenConnection" xml:space="preserve"><value>Apri connessione</value></data>
   <data name="DeleteConnection" xml:space="preserve"><value>Elimina connessione</value></data>
+  <data name="NoTableSelected" xml:space="preserve"><value>Nessuna tabella selezionata</value></data>
+  <data name="AddRecord" xml:space="preserve"><value>Aggiungi record</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Aggiorna</value></data>
+  <data name="SelectTableMessage" xml:space="preserve"><value>Seleziona una tabella dal browser degli schemi per visualizzare i dati.</value></data>
+  <data name="RowInserted" xml:space="preserve"><value>Record inserito con successo.</value></data>
+  <data name="ErrorAdding" xml:space="preserve"><value>Errore durante l'aggiunta</value></data>
+  <data name="AddNewRecord" xml:space="preserve"><value>Aggiungi nuovo record</value></data>
+  <data name="Add" xml:space="preserve"><value>Aggiungi</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Annulla</value></data>
+  <data name="RowUpdated" xml:space="preserve"><value>Record aggiornato.</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Errore durante il salvataggio</value></data>
+  <data name="EditRow" xml:space="preserve"><value>Modifica record</value></data>
+  <data name="RowDetails" xml:space="preserve"><value>Dettagli record</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>Nome (Opzionale)</value></data>
+  <data name="DatabaseEngine" xml:space="preserve"><value>Motore database</value></data>
+  <data name="ServerRequired" xml:space="preserve"><value>Il server è obbligatorio</value></data>
+  <data name="Port" xml:space="preserve"><value>Porta</value></data>
+  <data name="PortOptional" xml:space="preserve"><value>Porta (Opzionale)</value></data>
+  <data name="DatabaseOptional" xml:space="preserve"><value>Database (Opzionale)</value></data>
+  <data name="Username" xml:space="preserve"><value>Nome utente</value></data>
+  <data name="UsernameRequired" xml:space="preserve"><value>Il nome utente è obbligatorio</value></data>
+  <data name="Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Connect" xml:space="preserve"><value>Connetti</value></data>
+  <data name="SuccessfullyConnectedTo" xml:space="preserve"><value>Connesso con successo a</value></data>
+  <data name="TableName" xml:space="preserve"><value>Nome tabella</value></data>
+  <data name="TableNameRequired" xml:space="preserve"><value>Il nome della tabella è obbligatorio</value></data>
+  <data name="Columns" xml:space="preserve"><value>Colonne</value></data>
+  <data name="Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="LengthSize" xml:space="preserve"><value>Lunghezza/Dimensione</value></data>
+  <data name="Nullable" xml:space="preserve"><value>Nullable</value></data>
+  <data name="PK" xml:space="preserve"><value>PK</value></data>
+  <data name="AddColumn" xml:space="preserve"><value>Aggiungi colonna</value></data>
+  <data name="BinaryDataReadOnly" xml:space="preserve"><value>Dati binari (Sola lettura)</value></data>
+  <data name="Null" xml:space="preserve"><value>Null</value></data>
+  <data name="NoActiveConnection" xml:space="preserve"><value>Nessuna connessione attiva</value></data>
+  <data name="CreateTable" xml:space="preserve"><value>Crea tabella</value></data>
+  <data name="SelectAllRows" xml:space="preserve"><value>Seleziona tutte le righe</value></data>
+  <data name="ModifyTable" xml:space="preserve"><value>Modifica tabella</value></data>
+  <data name="DropTable" xml:space="preserve"><value>Elimina tabella</value></data>
+  <data name="Properties" xml:space="preserve"><value>Proprietà</value></data>
+  <data name="TableLoaded" xml:space="preserve"><value>Tabella caricata</value></data>
+  <data name="LoadingTableData" xml:space="preserve"><value>Caricamento dati tabella per</value></data>
+  <data name="TableCreatedSuccess" xml:space="preserve"><value>Tabella '{0}' creata con successo.</value></data>
+  <data name="ErrorCreatingTable" xml:space="preserve"><value>Errore durante la creazione della tabella</value></data>
+  <data name="ConfirmDataLoss" xml:space="preserve"><value>Conferma perdita dati</value></data>
+  <data name="DataLossWarning" xml:space="preserve"><value>Le seguenti colonne sono state modificate:\n\n{0}\n\nL'applicazione di queste modifiche ELIMINERÀ e RICREERÀ queste colonne, comportando una PERDITA DI DATI per queste colonne specifiche.\nSei sicuro di voler procedere?</value></data>
+  <data name="YesUnderstand" xml:space="preserve"><value>Sì, capisco</value></data>
+  <data name="ModificationsCancelled" xml:space="preserve"><value>Le modifiche alle colonne sono state annullate. Altre modifiche (aggiunte/eliminazioni/rinomini), se presenti, sono state elaborate.</value></data>
+  <data name="TableModifiedSuccess" xml:space="preserve"><value>Tabella '{0}' modificata con successo.</value></data>
+  <data name="ErrorModifyingTable" xml:space="preserve"><value>Errore durante la modifica della tabella</value></data>
+  <data name="DropTableConfirmation" xml:space="preserve"><value>Sei sicuro di voler eliminare la tabella '{0}'? Questa operazione non può essere annullata.</value></data>
+  <data name="TableDroppedSuccess" xml:space="preserve"><value>Tabella '{0}' eliminata.</value></data>
+  <data name="ErrorDroppingTable" xml:space="preserve"><value>Errore durante l'eliminazione della tabella</value></data>
+  <data name="DatabaseEmpty" xml:space="preserve"><value>Database vuoto</value></data>
+  <data name="NoTablesFound" xml:space="preserve"><value>Nessuna tabella trovata nel database '{0}'</value></data>
+  <data name="ErrorExpandingNode" xml:space="preserve"><value>Errore durante l'espansione del nodo</value></data>
+  <data name="Success" xml:space="preserve"><value>Successo</value></data>
+  <data name="Error" xml:space="preserve"><value>Errore</value></data>
+  <data name="Cancelled" xml:space="preserve"><value>Annullato</value></data>
+  <data name="Connection" xml:space="preserve"><value>Connessione</value></data>
 </root>

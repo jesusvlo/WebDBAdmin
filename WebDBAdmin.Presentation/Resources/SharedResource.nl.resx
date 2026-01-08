@@ -33,4 +33,64 @@
   <data name="EditConnection" xml:space="preserve"><value>Verbinding bewerken</value></data>
   <data name="OpenConnection" xml:space="preserve"><value>Verbinding openen</value></data>
   <data name="DeleteConnection" xml:space="preserve"><value>Verbinding verwijderen</value></data>
+  <data name="NoTableSelected" xml:space="preserve"><value>Geen tabel geselecteerd</value></data>
+  <data name="AddRecord" xml:space="preserve"><value>Record toevoegen</value></data>
+  <data name="Refresh" xml:space="preserve"><value>Verversen</value></data>
+  <data name="SelectTableMessage" xml:space="preserve"><value>Selecteer een tabel in de schemabrowser om gegevens te bekijken.</value></data>
+  <data name="RowInserted" xml:space="preserve"><value>Record succesvol ingevoegd.</value></data>
+  <data name="ErrorAdding" xml:space="preserve"><value>Fout bij toevoegen</value></data>
+  <data name="AddNewRecord" xml:space="preserve"><value>Nieuw record toevoegen</value></data>
+  <data name="Add" xml:space="preserve"><value>Toevoegen</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Annuleren</value></data>
+  <data name="RowUpdated" xml:space="preserve"><value>Record bijgewerkt.</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Fout bij opslaan</value></data>
+  <data name="EditRow" xml:space="preserve"><value>Record bewerken</value></data>
+  <data name="RowDetails" xml:space="preserve"><value>Recorddetails</value></data>
+  <data name="NameOptional" xml:space="preserve"><value>Naam (Optioneel)</value></data>
+  <data name="DatabaseEngine" xml:space="preserve"><value>Database-engine</value></data>
+  <data name="ServerRequired" xml:space="preserve"><value>Server is vereist</value></data>
+  <data name="Port" xml:space="preserve"><value>Poort</value></data>
+  <data name="PortOptional" xml:space="preserve"><value>Poort (Optioneel)</value></data>
+  <data name="DatabaseOptional" xml:space="preserve"><value>Database (Optioneel)</value></data>
+  <data name="Username" xml:space="preserve"><value>Gebruikersnaam</value></data>
+  <data name="UsernameRequired" xml:space="preserve"><value>Gebruikersnaam is vereist</value></data>
+  <data name="Password" xml:space="preserve"><value>Wachtwoord</value></data>
+  <data name="Connect" xml:space="preserve"><value>Verbinden</value></data>
+  <data name="SuccessfullyConnectedTo" xml:space="preserve"><value>Succesvol verbonden met</value></data>
+  <data name="TableName" xml:space="preserve"><value>Tabelnaam</value></data>
+  <data name="TableNameRequired" xml:space="preserve"><value>Tabelnaam is vereist</value></data>
+  <data name="Columns" xml:space="preserve"><value>Kolommen</value></data>
+  <data name="Type" xml:space="preserve"><value>Type</value></data>
+  <data name="LengthSize" xml:space="preserve"><value>Lengte/Grootte</value></data>
+  <data name="Nullable" xml:space="preserve"><value>Nullable</value></data>
+  <data name="PK" xml:space="preserve"><value>PK</value></data>
+  <data name="AddColumn" xml:space="preserve"><value>Kolom toevoegen</value></data>
+  <data name="BinaryDataReadOnly" xml:space="preserve"><value>Binaire gegevens (Alleen-lezen)</value></data>
+  <data name="Null" xml:space="preserve"><value>Null</value></data>
+  <data name="NoActiveConnection" xml:space="preserve"><value>Geen actieve verbinding</value></data>
+  <data name="CreateTable" xml:space="preserve"><value>Tabel maken</value></data>
+  <data name="SelectAllRows" xml:space="preserve"><value>Selecteer alle rijen</value></data>
+  <data name="ModifyTable" xml:space="preserve"><value>Tabel wijzigen</value></data>
+  <data name="DropTable" xml:space="preserve"><value>Tabel verwijderen</value></data>
+  <data name="Properties" xml:space="preserve"><value>Eigenschappen</value></data>
+  <data name="TableLoaded" xml:space="preserve"><value>Tabel geladen</value></data>
+  <data name="LoadingTableData" xml:space="preserve"><value>Tabelgegevens laden voor</value></data>
+  <data name="TableCreatedSuccess" xml:space="preserve"><value>Tabel '{0}' succesvol gemaakt.</value></data>
+  <data name="ErrorCreatingTable" xml:space="preserve"><value>Fout bij het maken van tabel</value></data>
+  <data name="ConfirmDataLoss" xml:space="preserve"><value>Bevestig gegevensverlies</value></data>
+  <data name="DataLossWarning" xml:space="preserve"><value>De volgende kolommen zijn gewijzigd:\n\n{0}\n\nHet toepassen van deze wijzigingen zal deze kolommen VERWIJDEREN en OPNIEUW MAKEN, wat resulteert in GEGEVENSVERLIES voor deze specifieke kolommen.\nWeet u zeker dat u wilt doorgaan?</value></data>
+  <data name="YesUnderstand" xml:space="preserve"><value>Ja, ik begrijp het</value></data>
+  <data name="ModificationsCancelled" xml:space="preserve"><value>Kolomwijzigingen zijn geannuleerd. Andere wijzigingen (toevoegingen/verwijderingen/hernoemingen) zijn indien van toepassing verwerkt.</value></data>
+  <data name="TableModifiedSuccess" xml:space="preserve"><value>Tabel '{0}' succesvol gewijzigd.</value></data>
+  <data name="ErrorModifyingTable" xml:space="preserve"><value>Fout bij het wijzigen van tabel</value></data>
+  <data name="DropTableConfirmation" xml:space="preserve"><value>Weet u zeker dat u tabel '{0}' wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</value></data>
+  <data name="TableDroppedSuccess" xml:space="preserve"><value>Tabel '{0}' verwijderd.</value></data>
+  <data name="ErrorDroppingTable" xml:space="preserve"><value>Fout bij het verwijderen van tabel</value></data>
+  <data name="DatabaseEmpty" xml:space="preserve"><value>Database leeg</value></data>
+  <data name="NoTablesFound" xml:space="preserve"><value>Geen tabellen gevonden in database '{0}'</value></data>
+  <data name="ErrorExpandingNode" xml:space="preserve"><value>Fout bij het uitvouwen van knooppunt</value></data>
+  <data name="Success" xml:space="preserve"><value>Succes</value></data>
+  <data name="Error" xml:space="preserve"><value>Fout</value></data>
+  <data name="Cancelled" xml:space="preserve"><value>Geannuleerd</value></data>
+  <data name="Connection" xml:space="preserve"><value>Verbinding</value></data>
 </root>

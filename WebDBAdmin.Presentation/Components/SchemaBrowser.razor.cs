@@ -3,6 +3,7 @@ using WebDBAdmin.Domain.Enums;
 using WebDBAdmin.Application.DTOs;
 using ConnectionInfo = WebDBAdmin.Domain.Entities.ConnectionInfo;
 using Microsoft.AspNetCore.Components; // Added for Parameter attribute
+using Microsoft.Extensions.Localization; // Added for IStringLocalizer
 
 namespace WebDBAdmin.Presentation.Components
 {
@@ -77,7 +78,7 @@ namespace WebDBAdmin.Presentation.Components
             }
             catch (Exception ex)
             {
-                NotificationService.Notify(NotificationSeverity.Error, "Error", ex.Message);
+                NotificationService.Notify(NotificationSeverity.Error, Loc["Error"], ex.Message);
             }
         }
 
@@ -120,18 +121,18 @@ namespace WebDBAdmin.Presentation.Components
 
             var menuItems = new List<ContextMenuItem>();
 
-            menuItems.Add(new ContextMenuItem { Text = "Properties", Value = "PROPERTIES", Icon = "info" });
+            menuItems.Add(new ContextMenuItem { Text = Loc["Properties"], Value = "PROPERTIES", Icon = "info" });
 
             if (node.Type == NodeType.Database)
             {
-                menuItems.Add(new ContextMenuItem { Text = "Create Table", Value = "CREATE_TABLE", Icon = "add_box" });
+                menuItems.Add(new ContextMenuItem { Text = Loc["CreateTable"], Value = "CREATE_TABLE", Icon = "add_box" });
             }
 
             if (node.Type == NodeType.Table)
             {
-                menuItems.Add(new ContextMenuItem { Text = "Select All Rows", Value = "SELECT", Icon = "table_rows" });
-                menuItems.Add(new ContextMenuItem { Text = "Modify Table", Value = "MODIFY_TABLE", Icon = "edit" });
-                menuItems.Add(new ContextMenuItem { Text = "Drop Table", Value = "DROP_TABLE", Icon = "delete" });
+                menuItems.Add(new ContextMenuItem { Text = Loc["SelectAllRows"], Value = "SELECT", Icon = "table_rows" });
+                menuItems.Add(new ContextMenuItem { Text = Loc["ModifyTable"], Value = "MODIFY_TABLE", Icon = "edit" });
+                menuItems.Add(new ContextMenuItem { Text = Loc["DropTable"], Value = "DROP_TABLE", Icon = "delete" });
             }
 
             if (menuItems.Count > 0)
@@ -164,11 +165,11 @@ namespace WebDBAdmin.Presentation.Components
                     UIInteraction.RequestTableLoad(connectionInfo, node.Name);
                 }
 
-                NotificationService.Notify(NotificationSeverity.Info, "Table Loaded", $"Loading table data for {node.Name}...");
+                NotificationService.Notify(NotificationSeverity.Info, Loc["TableLoaded"], $"{Loc["LoadingTableData"]} {node.Name}...");
             }
             else if (action == "PROPERTIES")
             {
-                NotificationService.Notify(NotificationSeverity.Info, "Properties", $"Type: {node.Type}, Name: {node.Name}");
+                NotificationService.Notify(NotificationSeverity.Info, Loc["Properties"], $"Type: {node.Type}, Name: {node.Name}");
             }
             else if (action == "CREATE_TABLE")
             {
@@ -189,7 +190,7 @@ namespace WebDBAdmin.Presentation.Components
             var connectionInfo = GetConnectionForNode(databaseNode);
             var tableDef = new TableDefinition();
 
-            var result = await DialogService.OpenAsync<TableDialog>("Create Table",
+            var result = await DialogService.OpenAsync<TableDialog>(Loc["CreateTable"],
                new Dictionary<string, object> {
                    { "TableDefinition", tableDef },
                    { "Engine", connectionInfo.Engine }
@@ -201,7 +202,7 @@ namespace WebDBAdmin.Presentation.Components
                 try
                 {
                     await TableService.CreateTableAsync(connectionInfo, newTable);
-                    NotificationService.Notify(NotificationSeverity.Success, "Success", $"Table '{newTable.Name}' created successfully.");
+                    NotificationService.Notify(NotificationSeverity.Success, Loc["Success"], string.Format(Loc["TableCreatedSuccess"], newTable.Name));
 
                     // Refresh database node
                     databaseNode.ChildrenLoaded = false;
@@ -211,7 +212,7 @@ namespace WebDBAdmin.Presentation.Components
                 }
                 catch (Exception ex)
                 {
-                    NotificationService.Notify(NotificationSeverity.Error, "Error Creating Table", ex.Message);
+                    NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorCreatingTable"], ex.Message);
                 }
             }
         }
@@ -242,7 +243,7 @@ namespace WebDBAdmin.Presentation.Components
                 }).ToList();
                 var originalColumnNames = originalColumns.Select(c => c.Name).ToList();
 
-                var result = await DialogService.OpenAsync<TableDialog>("Modify Table",
+                var result = await DialogService.OpenAsync<TableDialog>(Loc["ModifyTable"],
                    new Dictionary<string, object> {
                        { "TableDefinition", tableDef },
                        { "Engine", connectionInfo.Engine },
@@ -296,13 +297,10 @@ namespace WebDBAdmin.Presentation.Components
 
                     if (columnsToModify.Any())
                     {
-                        var msg = "The following columns have been modified:\n\n" +
-                                  string.Join("\n", columnsToModify.Select(c => $"- {c.Name}")) +
-                                  "\n\nApplying these changes will DROP and RE-CREATE these columns, resulting in DATA LOSS for these specific columns.\n" +
-                                  "Are you sure you want to proceed?";
+                        var msg = string.Format(Loc["DataLossWarning"], string.Join("\n", columnsToModify.Select(c => $"- {c.Name}")));
 
-                        var confirmResult = await DialogService.Confirm(msg, "Confirm Data Loss",
-                             new ConfirmOptions() { OkButtonText = "Yes, I understand", CancelButtonText = "Cancel" });
+                        var confirmResult = await DialogService.Confirm(msg, Loc["ConfirmDataLoss"],
+                             new ConfirmOptions() { OkButtonText = Loc["YesUnderstand"], CancelButtonText = Loc["Cancel"] });
 
                         if (confirmResult == true)
                         {
@@ -322,11 +320,11 @@ namespace WebDBAdmin.Presentation.Components
                             // Ideally, we should check this BEFORE steps 2 and 3 if we want atomic-like cancellation, 
                             // but usually modifications are unrelated to adds/drops. 
                             // However, strictly speaking, we are only cancelling the *modification* part here.
-                            NotificationService.Notify(NotificationSeverity.Info, "Cancelled", "Column modifications were cancelled. Other changes (adds/drops/renames) if any, were processed.");
+                            NotificationService.Notify(NotificationSeverity.Info, Loc["Cancelled"], Loc["ModificationsCancelled"]);
                         }
                     }
 
-                    NotificationService.Notify(NotificationSeverity.Success, "Success", $"Table '{modifiedTable.Name}' modified successfully.");
+                    NotificationService.Notify(NotificationSeverity.Success, Loc["Success"], string.Format(Loc["TableModifiedSuccess"], modifiedTable.Name));
 
                     // Refresh table node
                     tableNode.ChildrenLoaded = false;
@@ -341,14 +339,14 @@ namespace WebDBAdmin.Presentation.Components
             }
             catch (Exception ex)
             {
-                NotificationService.Notify(NotificationSeverity.Error, "Error Modifying Table", ex.Message);
+                NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorModifyingTable"], ex.Message);
             }
         }
 
         async Task HandleDropTable(SchemaNode tableNode)
         {
-            var result = await DialogService.Confirm($"Are you sure you want to drop table '{tableNode.Name}'? This cannot be undone.", "Drop Table",
-               new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+            var result = await DialogService.Confirm(string.Format(Loc["DropTableConfirmation"], tableNode.Name), Loc["DropTable"],
+               new ConfirmOptions() { OkButtonText = Loc["Yes"], CancelButtonText = Loc["No"] });
 
             if (result == true)
             {
@@ -356,7 +354,7 @@ namespace WebDBAdmin.Presentation.Components
                 try
                 {
                     await TableService.DropTableAsync(connectionInfo, tableNode.Name);
-                    NotificationService.Notify(NotificationSeverity.Success, "Success", $"Table '{tableNode.Name}' dropped.");
+                    NotificationService.Notify(NotificationSeverity.Success, Loc["Success"], string.Format(Loc["TableDroppedSuccess"], tableNode.Name));
 
                     // Remove from UI
                     if (tableNode.ParentNode != null && tableNode.ParentNode.Children != null)
@@ -367,7 +365,7 @@ namespace WebDBAdmin.Presentation.Components
                 }
                 catch (Exception ex)
                 {
-                    NotificationService.Notify(NotificationSeverity.Error, "Error Dropping Table", ex.Message);
+                    NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorDroppingTable"], ex.Message);
                 }
             }
         }
@@ -415,7 +413,7 @@ namespace WebDBAdmin.Presentation.Components
             }
             catch (Exception ex)
             {
-                NotificationService.Notify(NotificationSeverity.Error, "Error expanding node", ex.Message);
+                NotificationService.Notify(NotificationSeverity.Error, Loc["ErrorExpandingNode"], ex.Message);
                 node.ChildrenLoaded = false;
             }
         }
@@ -478,7 +476,7 @@ namespace WebDBAdmin.Presentation.Components
 
             if (!tables.Any())
             {
-                NotificationService.Notify(NotificationSeverity.Warning, "Database Empty", $"No tables found in database '{databaseNode.DatabaseName}'");
+                NotificationService.Notify(NotificationSeverity.Warning, Loc["DatabaseEmpty"], string.Format(Loc["NoTablesFound"], databaseNode.DatabaseName));
             }
 
             var children = new List<SchemaNode>();
